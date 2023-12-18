@@ -2,3 +2,6 @@
 target/
 bin/
 dependency-reduced-pom.xml
+
+## IDEs
+.vscode/
