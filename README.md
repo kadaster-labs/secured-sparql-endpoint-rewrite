@@ -14,6 +14,17 @@ Other relevant repositories are:
 - [Secured SPARQL Endpoint Sub Graph](https://github.com/kadaster-labs/secured-sparql-endpoint) (based on Apache Jena & SpringBoot)
 - (this repo) [Secured SPARQL Endpoint Rewrite (SPARQL Query)](https://github.com/kadaster-labs/secured-sparql-endpoint-rewrite) (based on Fuseki)
 
+## Development
+
+To build locally use [Maven](https://sdkman.io/sdks#maven):
+
+```bash
+mvn compile
+```
+
+To run locally from within your IDE, start the server with the test class (either in run or debug mode):
+[`StartServer.main()`](src/test/java/nl/kadaster/labs/lock_unlock/StartServer.java)
+
 ## License
 
 Licensed under [EUPL-1.2](LICENSE.md)

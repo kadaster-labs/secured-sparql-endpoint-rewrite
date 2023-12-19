@@ -1,0 +1,10 @@
+## Java stuff
+target/
+bin/
+dependency-reduced-pom.xml
+
+## Fuseki stuff
+run/
+
+## IDEs
+.vscode/
