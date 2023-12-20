@@ -30,23 +30,6 @@ ARG FUSEKI_WEBAPP_WAR=jena-fuseki-war-${JENA_VERSION}.war
 ARG JAVA_MINIMAL=/opt/java-minimal
 ARG LOCAL_DOCKER_DIR=docker
 
-# ## ---- Stage: Build java.
-# FROM eclipse-temurin:${JAVA_VERSION}-alpine AS build
-
-# ARG JENA_VERSION
-# ARG FUSEKI_JAR
-
-# RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
-# RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
-
-# # Alpine: For objcopy used in jlink
-# RUN apk add --no-cache curl binutils maven
-
-# ## build lock-unlock fuseki fulljar
-# WORKDIR /build
-# COPY . .
-# RUN mvn package
-
 ## ---- Stage: Download and build java.
 FROM eclipse-temurin:${JAVA_VERSION}-alpine AS base
 
@@ -87,9 +70,6 @@ RUN ./download.sh --chksum sha1 "$WAR_URL"
 ## unpack war to webapp
 RUN jar xf ${FUSEKI_WEBAPP_WAR}
 WORKDIR $FUSEKI_DIR
-
-## copy previous stage build fuseki jar artifact
-# COPY --from=build /build/target/${FUSEKI_JAR} .
 
 ## -- Alternatives to download : copy already downloaded.
 ## COPY ${FUSEKI_JAR} .
