@@ -29,5 +29,5 @@ $ docker build --build-arg JENA_VERSION=4.10.0 --build-arg LOCK_UNLOCK_VERSION=0
 Running (just) the docker container:
 
 ```bash
-$ docker run -i --rm -p "3030:3030" --name LockUnlockFusekiServer -t lock-unlock/lock-unlock-fuseki:0.1.0 --mem /ds
+$ docker run -i --rm -p "3030:3030" --name LockUnlockFusekiServer -t lock-unlock/lock-unlock-rewrite:0.1.0 --mem /ds
 ```
