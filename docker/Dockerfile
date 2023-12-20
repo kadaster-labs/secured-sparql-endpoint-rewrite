@@ -25,27 +25,27 @@ ARG LOCK_UNLOCK_VERSION=""
 
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
-ARG FUSEKI_JAR=lock-unlock-fuseki-${JENA_VERSION}-${LOCK_UNLOCK_VERSION}.jar
+ARG FUSEKI_JAR=lock-unlock-rewrite-${LOCK_UNLOCK_VERSION}.jar
 ARG FUSEKI_WEBAPP_WAR=jena-fuseki-war-${JENA_VERSION}.war
 ARG JAVA_MINIMAL=/opt/java-minimal
+ARG LOCAL_DOCKER_DIR=docker
 
-## ---- Stage: Build java.
-FROM eclipse-temurin:${JAVA_VERSION}-alpine AS build
+# ## ---- Stage: Build java.
+# FROM eclipse-temurin:${JAVA_VERSION}-alpine AS build
 
-ARG LOCK_UNLOCK_VERSION
-ARG JENA_VERSION
-ARG FUSEKI_JAR
+# ARG JENA_VERSION
+# ARG FUSEKI_JAR
 
-RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
-RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
+# RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
+# RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
 
-# Alpine: For objcopy used in jlink
-RUN apk add --no-cache curl binutils maven
+# # Alpine: For objcopy used in jlink
+# RUN apk add --no-cache curl binutils maven
 
-## build lock-unlock fuseki fulljar
-WORKDIR /build
-COPY . .
-RUN mvn package
+# ## build lock-unlock fuseki fulljar
+# WORKDIR /build
+# COPY . .
+# RUN mvn package
 
 ## ---- Stage: Download and build java.
 FROM eclipse-temurin:${JAVA_VERSION}-alpine AS base
@@ -55,6 +55,7 @@ ARG JENA_VERSION
 ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 ARG FUSEKI_WEBAPP_WAR
+ARG LOCAL_DOCKER_DIR
 ARG REPO=https://repo1.maven.org/maven2
 ARG WAR_URL=${REPO}/org/apache/jena/jena-fuseki-war/${JENA_VERSION}/${FUSEKI_WEBAPP_WAR}
 
@@ -62,13 +63,22 @@ RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; 
 RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
 
 # Alpine: For objcopy used in jlink
-RUN apk add --no-cache curl binutils
+RUN apk add --no-cache curl binutils maven
+
+## -- Build lock-unlock fuseki fulljar.
+WORKDIR /build
+COPY . .
+RUN mvn package
+
+## -- Copy lock-unlock jar to fuseki folder.
+RUN mkdir --parents "${FUSEKI_DIR}/webapp"
+RUN cp target/${FUSEKI_JAR} ${FUSEKI_DIR}/${FUSEKI_JAR}
 
 ## -- Workdir /fuseki.
 WORKDIR $FUSEKI_DIR/webapp
 
 ## -- Prepare download.
-COPY fuseki-docker/download.sh .
+COPY ${LOCAL_DOCKER_DIR}/download.sh .
 RUN chmod a+x download.sh
 
 # Download, with check of the SHA1 checksum.
@@ -79,7 +89,7 @@ RUN jar xf ${FUSEKI_WEBAPP_WAR}
 WORKDIR $FUSEKI_DIR
 
 ## copy previous stage build fuseki jar artifact
-COPY --from=build /build/target/${FUSEKI_JAR} .
+# COPY --from=build /build/target/${FUSEKI_JAR} .
 
 ## -- Alternatives to download : copy already downloaded.
 ## COPY ${FUSEKI_JAR} .
@@ -97,8 +107,8 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-ADD fuseki-docker/entrypoint.sh .
-ADD fuseki-docker/log4j2.properties .
+ADD ${LOCAL_DOCKER_DIR}/entrypoint.sh .
+ADD ${LOCAL_DOCKER_DIR}/log4j2.properties .
 
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}

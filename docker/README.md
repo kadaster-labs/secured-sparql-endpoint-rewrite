@@ -23,7 +23,7 @@ $ docker pull ghcr.io/lock-unlock/lock-unlock-fuseki:0.1.0
 Local build (run in the root of this repo):
 
 ```bash
-$ docker build --build-arg JENA_VERSION=4.10.0 --build-arg LOCK_UNLOCK_VERSION=0.1.0 -t lock-unlock/lock-unlock-fuseki:0.1.0 -f fuseki-docker/Dockerfile .
+$ docker build --build-arg JENA_VERSION=4.10.0 --build-arg LOCK_UNLOCK_VERSION=0.1.0 -t lock-unlock/lock-unlock-rewrite:0.1.0 -f docker/Dockerfile .
 ```
 
 Running (just) the docker container:
