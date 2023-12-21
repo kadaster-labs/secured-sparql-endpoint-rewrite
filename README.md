@@ -5,7 +5,7 @@ Fuseki2](https://jena.apache.org/documentation/fuseki2/) server. This implementa
 a **rewrite** of the SPARQL Query which applies the **Authorization Onthology**. This onthology is
 under research in the [Lock-Unlock Project](https://labs.kadaster.nl/cases/lockunlock).
 
-Other relevant repositories are:
+Other relevant repositories of the [Lock-Unlock Project](https://labs.kadaster.nl/cases/lockunlock) are:
 
 - [Lock-Unlock Onthologies](https://github.com/kadaster-labs/lock-unlock-onthologies)
   - Authorization Onthology (in research)
@@ -13,6 +13,7 @@ Other relevant repositories are:
 - [Lock-Unlock Testdata](https://github.com/kadaster-labs/lock-unlock-testdata)
 - [Secured SPARQL Endpoint Sub Graph](https://github.com/kadaster-labs/secured-sparql-endpoint) (based on Apache Jena & SpringBoot)
 - (this repo) [Secured SPARQL Endpoint Rewrite (SPARQL Query)](https://github.com/kadaster-labs/secured-sparql-endpoint-rewrite) (based on Fuseki)
+- [Lock-Unlock Helm Charts](https://github.com/kadaster-labs/lock-unlock-helm-charts)
 
 ## Development
 
