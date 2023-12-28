@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.jena.fuseki.Fuseki;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Query;
+import org.apache.jena.sparql.core.DatasetGraph;
 
 import kadasterfuseki.filter.user.User;
 
@@ -15,33 +17,35 @@ public class SecureGraphs {
 
 	Query query=null;
 	User user=null;
-	boolean debug=false;
+	boolean debug=true;
+	
 	
 	public SecureGraphs(Query query,User user) 
 	{
 		this.query=query;
 		
+		
 		this.user=user;
 		 Fuseki.serverLog.info("Executing locked/unlocked Graph filter");
 		 if (usesFromGraph())
 		 {
-			if (debug) System.out.println("check from graph query");
+			if (debug) System.out.println("check 'from' graph query");
 			 checkGraphs(query.getGraphURIs());
 		 }
 		 else
 		 {
-			 if (debug)  System.out.println("add from clause");
+			 if (debug)  System.out.println("add 'from' clause");
 			 addFromGraphs();
 		 }
 		 
 		 if (usesFromNamedGraph())
 		 {
-			 if (debug) System.out.println("check from named graph query");
+			 if (debug) System.out.println("check 'from named' graph query");
 			 checkGraphs(query.getNamedGraphURIs());
 		 }
 		 else
 		 {
-			 if (debug)  System.out.println("add from named clause");
+			 if (debug)  System.out.println("add 'from named' clause");
 			 addFromNamedGraphs();
 		 }
 		 
@@ -63,6 +67,7 @@ public class SecureGraphs {
 			if (!user.allowedGraphs.contains(graph))
 			{
 				remove.add(graph);
+				//datasets.removeGraph(NodeFactory.createURI(graph));
 			}
 		}
 		for (String rg:remove)

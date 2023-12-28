@@ -11,16 +11,43 @@ public class UserFactory {
 	public UserFactory() {
 		// TODO Auto-generated constructor stub
 	}
-	public static User getUser(Query query)
+	public static User getUser(String query)
+	{
+		try
+		{ 
+			
+			  String regexPattern ="#persona_.*[\\s;]";
+			  Pattern pattern = Pattern.compile(regexPattern);
+			  Matcher matcher = pattern.matcher(query.toLowerCase());
+			  if (matcher.find())
+			  {
+				  String usertype =matcher.group();
+				  usertype=usertype.replace("#persona_","").trim();
+				  usertype=usertype.replace(";","");
+				  return createUser(usertype);
+			  }
+	  
+			
+		
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return createAnonymous();
+	}
+	public static User getUser_old(Query query)
 	{
 		try
 		{
 			List<String> vars = query.getResultVars();
 			for (String v:vars)
 			{
-				if (v.startsWith("Persona_"))
+				if   (v.toLowerCase().startsWith("persona_")) 
 				{
-					v = v.replace("Persona_","");
+					v = v.toLowerCase().replace("persona_","");
 					return createUser(v);
 				}
 			}
@@ -86,6 +113,7 @@ public class UserFactory {
 		User u = new User("anon");
 		u.allowedGraphs.add("https://data.labs.kadaster.nl/Unlock/unlock/rkkgpercelen");
 		u.allowedGraphs.add("https://data.federatief.datastelsel.nl/lock-unlock/anbi");
+		u.performGraphRestrictions=true;
 		u.performPredicateRestrictions=false;
 		return u;
 		
@@ -95,8 +123,8 @@ public class UserFactory {
 	private static User createTest()
 	{
 		User u = new User("test");
-		u.performGraphRestrictions=false;
-		u.performPredicateRestrictions=true;
+		u.performGraphRestrictions=true;
+		u.performPredicateRestrictions=false;
 		PredicateFilter pf = new PredicateFilter("http://www.w3.org/1999/02/22-rdf-syntax-ns#value");
 		
 		
@@ -115,6 +143,7 @@ public class UserFactory {
 		u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authentication-ontology/graphs/users");
 		u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authorisation-ontology/graphs/rules");
 		u.performPredicateRestrictions=false;
+		u.performGraphRestrictions=true;
 		return u;
 		
 		

@@ -1,7 +1,7 @@
 package kadasterfuseki.filter;
 
 import org.apache.jena.query.Query;
-
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.syntax.Element;
 
 import kadasterfuseki.filter.impl.graphs.SecureGraphs;
@@ -14,11 +14,13 @@ public class EnrichSparqlQuery
 {
  public Query query = null;
  User user=null;
+
  
 	public EnrichSparqlQuery(Query query,User user) 
 	{
 	   this.query=query;
 	   this.user=user;
+	 
 	   
 	   if (user.performPredicateRestrictions)
 	   {

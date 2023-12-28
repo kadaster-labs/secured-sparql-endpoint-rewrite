@@ -14,6 +14,7 @@ import org.apache.jena.sparql.algebra.optimize.Optimize;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphMapLink;
 import org.apache.jena.sparql.core.DatasetGraphOne;
+import org.apache.jena.sparql.core.DynamicDatasets;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.engine.Plan;
 import org.apache.jena.sparql.engine.QueryEngineFactory;
@@ -27,11 +28,11 @@ import org.apache.jena.tdb.transaction.DatasetGraphTransaction;
 import kadasterfuseki.filter.user.User;
 import kadasterfuseki.filter.user.UserFactory;
 
-public class SparqlFilter 
+public class LockedQueryEngineFactory 
 implements QueryEngineFactory
 {
 
-	public SparqlFilter() {
+	public LockedQueryEngineFactory() {
 		// TODO Auto-generated constructor stub
 		
 	}
@@ -42,6 +43,7 @@ implements QueryEngineFactory
 		// fuseki config
 		if (arg1 instanceof DatasetGraphOne)
 			{
+			
 			return false; // fuseki config queries
 			}
 		if (arg1 instanceof DatasetGraphMapLink)
@@ -57,14 +59,24 @@ implements QueryEngineFactory
 		   {
 			 if ((arg0.getQueryType()==Query.QueryTypeSelect) || (arg0.getQueryType()==Query.QueryTypeConstruct))
 			 {
-			//	System.out.println("rewrite query ");
-			 User user =UserFactory.getUser(arg0);
-			 new EnrichSparqlQuery(arg0,user);
-			 System.out.println(arg0);
+			  
+				 User user =UserFactory.getUser_old(arg0);
+				 
+			
+				 
+				 Iterator<Node> it =arg1.listGraphNodes();
+				 while (it.hasNext())
+				 {
+					 System.out.println(it.next());
+				 }
+				 System.out.println("before \n"+arg1.size()+"   "+arg1.getDefaultGraph().size()+"   "+arg1.getUnionGraph().size()+"\n");		  
+				 new EnrichSparqlQuery(arg0,user);
+				// System.out.println("after \n"+arg0+"\n");
 			 }
 			 else
 			 {
-				 return true;// gives error so not processing
+				 arg0.setLimit(0);
+				 //return true;// gives error so not processing
 			 }
 			 
 	

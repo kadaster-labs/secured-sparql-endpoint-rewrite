@@ -9,7 +9,7 @@ import org.apache.jena.fuseki.server.Operation;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.QueryEngineRegistry;
 
-import kadasterfuseki.filter.SparqlFilter;
+import kadasterfuseki.filter.LockedQueryEngineFactory;
 
 /**
  * Skeleton copied from:
@@ -35,10 +35,11 @@ public class ModuleByServiceLoader implements FusekiAutoModule {
     @Override
     public void prepare(Builder serverBuilder, Set<String> datasetNames, Model configModel) {
         Fuseki.serverLog.info("Add authorization filter");
+       System.out.println("add autorization filter");
         // Register only for the server being built.
-   	   QueryEngineRegistry.addFactory(new SparqlFilter());
+   	   //QueryEngineRegistry.addFactory(new SparqlFilter());
    	   
-        if (false)
+        if (true)
         {
         	serverBuilder.registerOperation(myOperation, new AuthorizationFilter());
         	datasetNames.forEach(name -> serverBuilder.addEndpoint(name, "extra", myOperation));

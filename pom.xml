@@ -58,8 +58,39 @@
               <outputDirectory>${project.build.directory}/webapp</outputDirectory>
             </configuration>
           </execution>
-        </executions>
+            </executions>
       </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+             <executions>
+          <execution>
+                        <id>copy-resources</id>
+                       <phase>process-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/webapp</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <!-- Specify the source directory -->
+                                    <directory>${project.basedir}/src/webapp</directory>
+                                    <!-- Include only specific files or use <includes> to match a pattern -->
+                                    <!--<includes>
+                                        <include>**/*.txt</include>
+                                    </includes>-->
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+          
+            </executions>
+            </plugin>
+          
+      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
