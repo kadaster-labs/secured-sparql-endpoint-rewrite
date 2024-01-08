@@ -39,10 +39,13 @@ public class ContainsPathVisitor implements PathVisitor {
 	PredicateFilter pf=null;
 	public boolean contains=false;
 	public boolean isSimple=false;
+	private boolean replace=false;
 	
-	public ContainsPathVisitor(PredicateFilter pf)
+	public ContainsPathVisitor(PredicateFilter pf,boolean replace)
 	{
-	 this.pf=pf;
+	   this.pf=pf;
+	    this.replace=replace;
+	 
 	}
 
 	public  boolean containsPred(String s)
@@ -53,14 +56,13 @@ public class ContainsPathVisitor implements PathVisitor {
 			return true;
 			}
 		return false;
-		
 	}
 	
 	public  boolean changeIfNecessary(Path p)
 	{
 		if (p.toString().contains(this.pf.predicate))
 		{
-			
+               		
 				contains=true;
 				return true;
 		}
@@ -72,7 +74,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Link arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P LINK "+arg0);
+		System.out.println("Contains Path: P LINK "+arg0);
 		if (changeIfNecessary(arg0))
 			{
 			   
@@ -84,6 +86,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_ReverseLink arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("Contains Path: reverse LINK "+arg0);
 		if (changeIfNecessary(arg0))
 		{
 			
@@ -94,7 +97,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_NegPropSet arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_NegPropSet"+arg0);
+		System.out.println("Contains Path:  P_NegPropSet"+arg0);
 		containsPred(arg0.toString());
 		
 	}
@@ -102,14 +105,14 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Inverse arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_Inverse"+arg0);
+		System.out.println("Contains Path:  P_Inverse"+arg0);
 		containsPred(arg0.toString());
 	}
 
 	@Override
 	public void visit(P_Mod arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_Mod"+arg0);
+		System.out.println("Contains Path:  P_Mod"+arg0);
 		arg0.getSubPath().visit(this);
 		
 		
@@ -118,7 +121,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_FixedLength arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_FixedLength"+arg0);
+		System.out.println("Contains Path:  P_FixedLength"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -126,7 +129,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Distinct arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_distinct"+arg0);
+		System.out.println("Contains Path: P_distinct"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -134,7 +137,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Multi arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_Multi"+arg0);
+		System.out.println("Contains Path:  P_Multi"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	     
@@ -145,7 +148,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Shortest arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_Shortest"+arg0);
+		System.out.println("Contains Path:  P_Shortest"+arg0);
 		arg0.getSubPath().visit(this);
 		
 		
@@ -154,7 +157,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_ZeroOrOne arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_ZeroOrOne"+arg0);
+		System.out.println("Contains Path:  P_ZeroOrOne"+arg0);
 		arg0.getSubPath().visit(this);
 		
 		
@@ -163,7 +166,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_ZeroOrMore1 arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_ZeroOrMore1"+arg0);
+		System.out.println("Contains Path:  P_ZeroOrMore1"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -171,7 +174,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_ZeroOrMoreN arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_ZeroOrMoreN"+arg0);
+		System.out.println("Contains Path:  P_ZeroOrMoreN"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -179,7 +182,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_OneOrMore1 arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_OneOrMore1"+arg0);
+		System.out.println("Contains Path:  P_OneOrMore1"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -187,7 +190,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_OneOrMoreN arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_OneOrMoreN"+arg0);
+		System.out.println("Contains Path: P_OneOrMoreN"+arg0);
 		arg0.getSubPath().visit(this);
 		
 	}
@@ -195,7 +198,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Alt arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_alt"+arg0);
+		System.out.println("Contains Path: P_alt"+arg0);
 		containsPred(arg0.toString());
 		
 	}
@@ -203,7 +206,7 @@ public class ContainsPathVisitor implements PathVisitor {
 	@Override
 	public void visit(P_Seq arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("P_Seq"+arg0);
+		System.out.println("Contains Path: P_Seq"+arg0);
 		arg0.getLeft().visit(this);
 		arg0.getRight().visit(this);
 		

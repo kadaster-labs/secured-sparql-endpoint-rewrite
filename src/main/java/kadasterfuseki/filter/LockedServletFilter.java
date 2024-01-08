@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.fuseki.servlets.FusekiFilter;
 
 public class LockedServletFilter extends FusekiFilter {
@@ -21,7 +22,8 @@ public class LockedServletFilter extends FusekiFilter {
 	public void init(FilterConfig filterConfig) {
 		// TODO Auto-generated method stub
 		super.init(filterConfig);
-		System.out.println("init locked unlocked filter");
+		 Fuseki.serverLog.info("Add Kadaster Lock-Unlock Authorization filter version 0.2");
+		//System.out.println("init Kadaster locked-unlocked filter version 0.2");
 	}
 
 	@Override
@@ -32,13 +34,16 @@ public class LockedServletFilter extends FusekiFilter {
 		if (request instanceof HttpServletRequest )
 		{
 			HttpServletRequest r2 = (HttpServletRequest) request;
+			
+			
 			String url=r2.getRequestURI();
 			
 			if (url.endsWith("ping")) return;
+			
 				String query =r2.getParameter("query");
 				if (query!=null)
 				{
-					System.out.println("do filter");
+					System.out.println("\ndo filter");
 					SecuredServletRequest ssr=new SecuredServletRequest(r2,query);
 					chain.doFilter(ssr, response);
 					return;

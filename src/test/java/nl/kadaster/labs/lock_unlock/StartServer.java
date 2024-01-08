@@ -2,6 +2,7 @@ package nl.kadaster.labs.lock_unlock;
 
 import java.util.EnumSet;
 
+
 import javax.servlet.DispatcherType;
 
 import org.apache.jena.fuseki.Fuseki;
@@ -18,7 +19,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.apache.jena.fuseki.servlets.FusekiFilter;
 import org.apache.jena.fuseki.system.FusekiLogging;
 
-import kadasterfuseki.filter.LockedQueryEngineFactory;
+
 import kadasterfuseki.filter.LockedServletFilter;
 
 
@@ -63,8 +64,8 @@ public static void withGui()
     	if (false)
     	{
     		//old
-    		Fuseki.init(); // so that the new queryengine filter sticks.
-    		QueryEngineRegistry.addFactory(new LockedQueryEngineFactory());
+    	//	Fuseki.init(); // so that the new queryengine filter sticks.
+    	//	QueryEngineRegistry.addFactory(new LockedQueryEngineFactory());
     	}
 
     	
@@ -74,8 +75,6 @@ public static void withGui()
     	//  context.addFilter( LockedServletFilter.class, "/*",  EnumSet.of(DispatcherType.REQUEST));
     	  
     
-    	  
-    	
     	
         String[] args = {"--conf=C:/DSchijf/dbdata/fusekidb/config.ttl", "--ping"};
    

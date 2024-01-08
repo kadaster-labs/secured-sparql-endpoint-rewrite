@@ -5,29 +5,54 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QueryParseException;
 
 import kadasterfuseki.filter.user.User;
 import kadasterfuseki.filter.user.UserFactory;
+import kadasterfuseki.logging.SparqlLogging;
 
 public class SecuredServletRequest extends HttpServletRequestWrapper {
 
 	String squery=null;
+	
 	public SecuredServletRequest(HttpServletRequest request,String query)
 	{
 		super(request);
 		try
 		{
-			Query q  = QueryFactory.create(query);
 		
-			User user =UserFactory.getUser(query);
-			EnrichSparqlQuery esq = new EnrichSparqlQuery(q, user);
 			
-			this.squery=esq.query.toString();
-		//	System.out.println(this.squery);
+				Query q  = QueryFactory.create(query);
+				User user =UserFactory.getUser(request,query);
+				if (user!=null)
+				{
+				
+				RewriteSparqlEngine esq = new RewriteSparqlEngine(q, user);
+				this.squery=esq.query.toString();
+			
+				//.getServletPath()
+				
+				SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+				log.addQueries(query, esq.query.toString(), user);
+				System.out.println("\n"+this.squery);
+			}
+			else
+			{
+				
+				this.squery=query;
+			}
+			
+			
+			
+		}
+		catch(QueryParseException e)
+		{
+			this.squery=query; //very dangereous
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		
 		}
 		
 		
@@ -46,7 +71,7 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 	@Override
 	public String[] getParameterValues(String name) {
 		// TODO Auto-generated method stub
-		System.out.println("get aprameter values "+name);
+		//System.out.println("get aprameter values "+name);
 		return super.getParameterValues(name);
 	}
 	

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.jena.query.Query;
 
 public class UserFactory {
@@ -11,8 +13,16 @@ public class UserFactory {
 	public UserFactory() {
 		// TODO Auto-generated constructor stub
 	}
-	public static User getUser(String query)
+	public static User getUser(HttpServletRequest request,String query)
 	{
+		
+		String servletPath=request.getServletPath();
+		String repo  =servletPath.split("/")[1];
+		if (!repo.equalsIgnoreCase("unlocked"))
+		{
+			return null;
+		}
+		
 		try
 		{ 
 			
@@ -27,9 +37,6 @@ public class UserFactory {
 				  return createUser(usertype);
 			  }
 	  
-			
-		
-			
 		}
 		catch(Exception e)
 		{
@@ -38,27 +45,7 @@ public class UserFactory {
 		
 		return createAnonymous();
 	}
-	public static User getUser_old(Query query)
-	{
-		try
-		{
-			List<String> vars = query.getResultVars();
-			for (String v:vars)
-			{
-				if   (v.toLowerCase().startsWith("persona_")) 
-				{
-					v = v.toLowerCase().replace("persona_","");
-					return createUser(v);
-				}
-			}
-			
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return createAnonymous();
-	}
+	
 	private User old(Query query) {
 		try
 		{
@@ -98,6 +85,10 @@ public class UserFactory {
 		{
 			return createTest();
 		}
+		if (type.equalsIgnoreCase("log"))
+		{
+			return createLogUser();
+		}
 		
 		if (type.equalsIgnoreCase("all"))
 		{
@@ -123,12 +114,12 @@ public class UserFactory {
 	private static User createTest()
 	{
 		User u = new User("test");
-		u.performGraphRestrictions=true;
-		u.performPredicateRestrictions=false;
+		u.performGraphRestrictions=false;
+		u.performPredicateRestrictions=true;
 		PredicateFilter pf = new PredicateFilter("http://www.w3.org/1999/02/22-rdf-syntax-ns#value");
 		
 		
-		 pf.conditions.add("?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?object");
+		// pf.conditions.add("?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?object");
 
 		 
 		u.predicateFilters.add(pf);
@@ -148,6 +139,16 @@ public class UserFactory {
 		
 		
 	}
+	private static User createLogUser()
+	{
+		User u = new User("logUser");
+		u.performGraphRestrictions=true;
+		u.performPredicateRestrictions=false;
+		u.allowedGraphs.add("http://labs.kadaster.nl/logging");
+		return u;
+		
+	}
+	
 	private static User createAll()
 	{
 		User u = new User("all");

@@ -7,16 +7,17 @@ import org.apache.jena.sparql.syntax.Element;
 import kadasterfuseki.filter.impl.graphs.SecureGraphs;
 
 import kadasterfuseki.filter.impl.predicates.SecuredElementVisitor;
+import kadasterfuseki.filter.impl.service.SecureService;
 import kadasterfuseki.filter.user.PredicateFilter;
 import kadasterfuseki.filter.user.User;
 
-public class EnrichSparqlQuery 
+public class RewriteSparqlEngine 
 {
  public Query query = null;
  User user=null;
 
  
-	public EnrichSparqlQuery(Query query,User user) 
+	public RewriteSparqlEngine(Query query,User user) 
 	{
 	   this.query=query;
 	   this.user=user;
@@ -31,6 +32,14 @@ public class EnrichSparqlQuery
 	   {
 		   processGraphs();
 	   }
+	   if (user.serviceFilters.size()>0)
+	   {
+		   processServiceFilters();
+	   }
+	}
+	private void processServiceFilters()
+	{
+		new SecureService(query,user);
 	}
 	
 	private void processGraphs()

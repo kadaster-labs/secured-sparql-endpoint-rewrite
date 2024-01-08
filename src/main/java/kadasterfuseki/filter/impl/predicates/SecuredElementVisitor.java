@@ -11,6 +11,8 @@ import org.apache.jena.sparql.core.TriplePath;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.path.P_Link;
 import org.apache.jena.sparql.path.Path;
+import org.apache.jena.sparql.path.PathFactory;
+import org.apache.jena.sparql.path.PathParser;
 import org.apache.jena.sparql.syntax.Element;
 import org.apache.jena.sparql.syntax.ElementAssign;
 import org.apache.jena.sparql.syntax.ElementBind;
@@ -31,6 +33,7 @@ import org.apache.jena.sparql.syntax.ElementTriplesBlock;
 import org.apache.jena.sparql.syntax.ElementUnion;
 import org.apache.jena.sparql.syntax.ElementVisitor;
 import org.apache.jena.sparql.util.ExprUtils;
+import org.apache.jena.sparql.util.PrefixMapping2;
 
 import kadasterfuseki.filter.user.PredicateFilter;
 
@@ -112,57 +115,91 @@ public class SecuredElementVisitor implements ElementVisitor {
 	
 	}
 	
+	
 	private TriplePath processTriplePath(TriplePath t)
 	{
+		System.out.println("process triple path");
 		Node pred =t.getPredicate();
-		
 		TriplePath rt =t;
 		
 		boolean processed=false;
+		if (pred!=null)
+		{
 		
 			if (pred.isVariable())
 			{
 				System.out.println("variable.. so we need to a add a filter "+pred.getName());
+				if (pf.hasConditions())
+				{
+					//if pred == secured pred then make sure it fulfils the conditions
+					System.out.println("pred variable found we need to make sure it is not a secured pred except when it meets the available conditions. This is not yet implemented");
+					doNotRun();
+					return rt;
+				}
+				else
+				{
+				      // variable can not be of secured predicate so add ing extra filter
+					Expr expr =new ExprUtils().parse("?"+pred.getName()+"!=<"+this.pf.predicate+">");
+					ElementFilter ef = new ElementFilter(expr);
+					add.add(ef);
+					processed=true;
+					return rt;
+				}
 				
-				 Expr expr =new ExprUtils().parse("?"+pred.getName()+"!=<"+this.pf.predicate+">");
-				 
-				 ElementFilter ef = new ElementFilter(expr);
-				 
-				add.add(ef);
-				
-			   
-				processed=true;
 			}
+			
 			if (pred.isURI())
 			{
-				P_Link newPredicate = new P_Link(NodeFactory.createURI(PredicateFilter.notexistingPred));
-
-				rt = new TriplePath(
-		                t.getSubject(),
-		                newPredicate,
-		                t.getObject()
-		        );
-				//remove this one
+				 if (pred.toString().equalsIgnoreCase(pf.predicate))
+				 {
+					 		P_Link newPredicate = new P_Link(NodeFactory.createURI(PredicateFilter.notexistingPred));
+					 		rt = new TriplePath(t.getSubject(),newPredicate,t.getObject());
+					 		processed=true;
+				 }
+				 return rt;
 				
-				//remove.add(t);
-				
-				
-				processed=true;
 			}
+			System.out.println("weird. what is pred then?");
+			doNotRun();
+			return rt;
+			
+		}
 			if (t.getPath()!=null)
 			{
-				System.out.println("property path.. not yet implemented");
-				doNotRun();
-				if (false)
-				{
-					ContainsPathVisitor cp = new ContainsPathVisitor(this.pf);
+		      if (!pf.hasConditions())
+		      {
+		    	  ContainsPathVisitor cp = new ContainsPathVisitor(this.pf,true);
 					t.getPath().visit(cp);
 					if  ( (cp.contains))  
 					{
-					 //  remove.add(t);
+						String s=t.getPath().toString();
+						String old=s;
+						while (true)
+						{
+						   s=old.replace(this.pf.predicate, PredicateFilter.notexistingPred);
+						   if (old.equalsIgnoreCase(s)) break;
+						   old=s;
+						}
 						
+					  ;	
+					  
+						rt = new TriplePath(t.getSubject(),PathParser.parse(s,PrefixMapping2.Standard ),t.getObject());
+				         return rt;		
+					 	
 				    }
+					  System.out.println("path contains illegal predicate");
+					   doNotRun();
+					
+		      }
+		      else
+		      {
+				System.out.println("property path with conditions.. not yet implemented");
+				doNotRun();
+				if (false)
+				{
+					
 				}
+		      }
 				processed=true;
 			}
 		
@@ -183,7 +220,7 @@ public class SecuredElementVisitor implements ElementVisitor {
 		for (TriplePath t:pb.getList())
 		{
 			remove.add(t);
-		  add.add(processTriplePath(t));	
+		   add.add(processTriplePath(t));	
 		}
 		for (TriplePath t:remove) pb.getList().remove(t);
 		for (TriplePath t:add) pb.getList().add(t);
@@ -329,6 +366,7 @@ public class SecuredElementVisitor implements ElementVisitor {
 	public void visit(ElementService arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("Element service not need to visit this part ");
+		
 		
 	}
 
