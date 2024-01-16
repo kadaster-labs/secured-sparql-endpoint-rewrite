@@ -94,11 +94,46 @@ public class UserFactory {
 		{
 			return createAll();
 		}
+		if (type.equalsIgnoreCase("Almere"))
+		{
+			return createGemeente("Almere");
+		}
+		
+		if (type.equalsIgnoreCase("Zeewolde"))
+		{
+			return createGemeente("Zeewolde");
+		}
+		if (type.equalsIgnoreCase("koopsom"))
+		{
+			return createKoopsomUser();
+		}
 		
 		
 		
 		return createAnonymous();
 	}
+	
+	private static User createGemeente(String gemeente)
+	{
+		System.out.println("gemeente user "+gemeente);
+		
+		User u = new User("gemeente_"+gemeente);
+		u.performGraphRestrictions=false;
+		u.performPredicateRestrictions=false;
+		u.performHorizontalFilters=true;
+		int gcode=0;
+		if (gemeente.equalsIgnoreCase("zeewolde")) gcode=1156;
+		if (gemeente.equalsIgnoreCase("almere")) gcode=25;
+		
+		u.horizontalFilters.add(new HorizontalFilter("https://data.federatief.datastelsel.nl/lock-unlock/brp/def/NatuurlijkPersoon", "https://data.federatief.datastelsel.nl/lock-unlock/brp/def/heeftVerblijfsplaats","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
+		u.horizontalFilters.add(new HorizontalFilter("http://modellen.geostandaarden.nl/def/imx-geo#Perceel", "https://brk.basisregistraties.overheid.nl/brk2/def/kadastraleGemeente","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
+		
+		
+		
+		return u;
+	}
+	
+		
 	private static User createAnonymous()
 	{
 		User u = new User("anon");
@@ -109,6 +144,15 @@ public class UserFactory {
 		return u;
 		
 		
+	}
+	private static User createKoopsomUser()
+	{
+		User u = new User("koopsom");
+		u.performGraphRestrictions=false;
+		u.performPredicateRestrictions=true;
+		PredicateFilter pf = new PredicateFilter("http://www.w3.org/1999/02/22-rdf-syntax-ns#value");
+		u.predicateFilters.add(pf);
+		return u;
 	}
 	
 	private static User createTest()

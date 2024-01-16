@@ -8,12 +8,15 @@ public class User {
 
 	public Vector<String> allowedGraphs = new Vector<String>();
 	public Vector<PredicateFilter> predicateFilters = new Vector<PredicateFilter>();
-	
 	public Vector<ServiceFilter> serviceFilters = new Vector<ServiceFilter>();
+	public Vector<HorizontalFilter> horizontalFilters = new Vector<HorizontalFilter>();
+	
 	
 	public String label=null;
 	public boolean performGraphRestrictions=true;
 	public boolean performPredicateRestrictions=true;
+	public boolean performHorizontalFilters=false;
+	
 	String uri="http://labs.kadaster.nl/user#";
 	
 	public User(String label)

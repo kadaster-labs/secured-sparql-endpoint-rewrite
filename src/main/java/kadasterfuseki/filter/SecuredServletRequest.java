@@ -32,9 +32,17 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 			
 				//.getServletPath()
 				
+				try
+				{
 				SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
 				log.addQueries(query, esq.query.toString(), user);
-				System.out.println("\n"+this.squery);
+				System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
+				}
+				catch(Exception e)
+				{
+					System.err.println("logging error");
+					e.printStackTrace();
+				}
 			}
 			else
 			{
