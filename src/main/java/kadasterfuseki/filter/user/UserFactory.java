@@ -18,7 +18,7 @@ public class UserFactory {
 		
 		String servletPath=request.getServletPath();
 		String repo  =servletPath.split("/")[1];
-		if (!repo.equalsIgnoreCase("unlocked"))
+		if  ( (!repo.equalsIgnoreCase("unlocked")) && (!repo.equalsIgnoreCase("unlockedInMem")) )
 		{
 			return null;
 		}
@@ -127,8 +127,6 @@ public class UserFactory {
 		
 		u.horizontalFilters.add(new HorizontalFilter("https://data.federatief.datastelsel.nl/lock-unlock/brp/def/NatuurlijkPersoon", "https://data.federatief.datastelsel.nl/lock-unlock/brp/def/heeftVerblijfsplaats","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
 		u.horizontalFilters.add(new HorizontalFilter("http://modellen.geostandaarden.nl/def/imx-geo#Perceel", "https://brk.basisregistraties.overheid.nl/brk2/def/kadastraleGemeente","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
-		
-		
 		
 		return u;
 	}

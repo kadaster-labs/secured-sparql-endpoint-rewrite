@@ -39,6 +39,8 @@ public class LockedServletFilter extends FusekiFilter {
 			String url=r2.getRequestURI();
 			
 			if (url.endsWith("ping")) return;
+			//if (true) {super.doFilter(request, response, chain); System.out.println("skipping");return;}
+			
 			
 				String query =r2.getParameter("query");
 				if (query!=null)

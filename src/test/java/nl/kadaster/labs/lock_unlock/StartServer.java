@@ -2,7 +2,7 @@ package nl.kadaster.labs.lock_unlock;
 
 import java.util.EnumSet;
 
-
+import javax.net.ssl.TrustManager;
 import javax.servlet.DispatcherType;
 
 import org.apache.jena.fuseki.Fuseki;
@@ -25,11 +25,14 @@ import kadasterfuseki.filter.LockedServletFilter;
 
 public class StartServer {
 	
+	
+	
 public static void serverWithoutGui()
 {
 	//FUSEKI_HOME=C:\DSchijf\dbdata\fusekidb
 	//[2023-12-28 13:22:45] Config     INFO  FUSEKI_BASE=C:\DSchijf\dbdata\fusekidb
 	System.out.println("start server");
+
 	 FusekiLogging.setLogging();
 	Builder builder= FusekiServer.create();
 	builder.port(3030).verbose(true).addFilter("/*",new LockedServletFilter()).enableCors(true);
@@ -54,6 +57,10 @@ public static void withGui()
 
     public static void main(String[] _args)
     {
+    //	System.out.println("disable shit");
+    //	System.setProperty("com.sun.net.ssl.checkRevocation", "false");
+    //	System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
+    	//System.setProperty("javax.net.debug", "all");
     	withGui();
     }
     public static void test()

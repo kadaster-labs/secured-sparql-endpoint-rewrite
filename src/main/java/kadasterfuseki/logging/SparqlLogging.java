@@ -51,7 +51,7 @@ public class SparqlLogging {
 		String sS=d.getSeconds()+"";
 		if (d.getSeconds()<10) sS="0"+sS;
 		
-		String date=(d.getYear()+1900)+"-"+m+"-"+day+"T"+hourS+":"+minS+":"+sS+".000";
+		String date=(d.getYear()+1900)+"-"+ms+"-"+dayS+"T"+hourS+":"+minS+":"+sS+".000";
 		query=StringEscapeUtils.escapeJava(query);
 		pquery=StringEscapeUtils.escapeJava(pquery);
 				
@@ -62,7 +62,7 @@ public class SparqlLogging {
         				+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/startDate> \""+date+"\"^^<http://www.w3.org/2001/XMLSchema#dateTime>."
         				
         						+ "  }}";
-        System.out.println(updateQuery);
+     //   System.out.println(updateQuery);
 		 UpdateProcessor processor = UpdateExecutionFactory.createRemote(
 	                UpdateFactory.create(updateQuery),
 	                endpoint
