@@ -17,16 +17,9 @@
 -->
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	 version="3.0" metadata-complete="true">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-complete="true">
 
   <display-name>Apache Jena Fuseki Locked Server </display-name>
-
-
-
-
-
 
   <listener>
     <!-- Basic server initialization, including logging -->
@@ -46,29 +39,31 @@
   <listener>
     <listener-class>org.apache.jena.fuseki.webapp.FusekiServerListener</listener-class>
   </listener>
-  
+
+  <!-- Lock-Unlock Authorization Filter -->
+
   <filter>
-        <filter-name>LockedFilter</filter-name>
-        <filter-class>kadasterfuseki.filter.LockedServletFilter</filter-class>
-        <!-- Add filter initialization parameters if needed -->
-        <!--<init-param>
+    <filter-name>LockedFilter</filter-name>
+    <filter-class>kadasterfuseki.filter.LockedServletFilter</filter-class>
+    <!-- Add filter initialization parameters if needed -->
+    <!--<init-param>
             <param-name>paramName</param-name>
             <param-value>paramValue</param-value>
         </init-param>-->
-    </filter>
-       <filter-mapping>
-        <filter-name>LockedFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    
-    </filter-mapping>
-    
+  </filter>
+  <filter-mapping>
+    <filter-name>LockedFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+
+  </filter-mapping>
+
 
   <!-- CORS -->
   <filter>
     <filter-name>cross-origin</filter-name>
     <!-- Ported and standalone version of org.eclipse.jetty.servlets.CrossOriginFilter -->
     <filter-class>org.apache.jena.fuseki.servlets.CrossOriginFilter</filter-class>
-    <!-- Defaults may be fine --> 
+    <!-- Defaults may be fine -->
     <init-param>
       <param-name>allowedOrigins</param-name>
       <param-value>*</param-value>
@@ -90,7 +85,7 @@
       <param-value>false</param-value>
     </init-param>
   </filter>
-  
+
   <filter-mapping>
     <filter-name>cross-origin</filter-name>
     <url-pattern>/*</url-pattern>
@@ -123,7 +118,7 @@
     <param-name>log4jConfiguration</param-name>
     <param-value>log4j2.properties</param-value>
   </context-param>
-  
+
   <!-- Fuseki dataset serviced calls -->
   <filter>
     <filter-name>Fuseki</filter-name>
@@ -140,12 +135,12 @@
   </filter-mapping>
 
   <!-- Server controls-->
-  
+
   <servlet>
     <servlet-name>PingServlet</servlet-name>
     <servlet-class>org.apache.jena.fuseki.ctl.ActionPing</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>PingServlet</servlet-name>
     <url-pattern>/$/ping</url-pattern>
@@ -190,7 +185,7 @@
     <servlet-name>BackupListServlet</servlet-name>
     <servlet-class>org.apache.jena.fuseki.mgt.ActionBackupList</servlet-class>
   </servlet>
-  
+
   <servlet>
     <servlet-name>ActionCompact</servlet-name>
     <servlet-class>org.apache.jena.fuseki.ctl.ActionCompact</servlet-class>
@@ -214,14 +209,14 @@
 
   <servlet-mapping>
     <servlet-name>ActionBackup</servlet-name>
-    <url-pattern>/$/backups/*</url-pattern>         <!-- Alt spelling -->
+    <url-pattern>/$/backups/*</url-pattern>    <!-- Alt spelling -->
   </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>BackupListServlet</servlet-name>
     <url-pattern>/$/backups-list</url-pattern>
   </servlet-mapping>
-  
+
   <servlet-mapping>
     <servlet-name>ActionCompact</servlet-name>
     <url-pattern>/$/compact/*</url-pattern>
@@ -249,7 +244,7 @@
     <servlet-name>ActionDatasets</servlet-name>
     <servlet-class>org.apache.jena.fuseki.mgt.ActionDatasets</servlet-class>
   </servlet>
-  
+
   <servlet>
     <servlet-name>ActionLogs</servlet-name>
     <servlet-class>org.apache.jena.fuseki.mgt.ActionLogs</servlet-class>
@@ -304,7 +299,7 @@
     <extension>trdf</extension>
     <mime-type>application/rdf+thrift</mime-type>
   </mime-mapping>
-  
+
   <mime-mapping>
     <extension>rq</extension>
     <mime-type>application/sparql-query</mime-type>
