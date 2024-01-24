@@ -28,7 +28,7 @@ public class SparqlLogging {
 	{
 		this.endpoint=endpoint.replace("/query","").replace("/sparql", "");
 		
-		System.out.println("endpoint is "+this.endpoint);
+		//System.out.println("endpoint is "+this.endpoint);
 	     uri="<http://labs.kadaster.nl/logging/log"+UUID.randomUUID().toString()+">";
 	    
 	}
@@ -75,7 +75,7 @@ public class SparqlLogging {
 	}
 	public void addTripleQuery(String uri, String pred, String litral)
 	{
-		
+		System.out.println("not yet implemented");
 	}
 
 }

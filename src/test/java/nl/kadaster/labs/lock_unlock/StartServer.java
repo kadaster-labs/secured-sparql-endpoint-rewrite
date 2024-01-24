@@ -15,6 +15,7 @@ import org.apache.jena.fuseki.main.cmds.FusekiMain;
 import org.apache.jena.fuseki.main.cmds.FusekiMainCmd;
 import org.apache.jena.fuseki.main.FusekiServer;
 import org.apache.jena.sparql.engine.QueryEngineRegistry;
+import org.apache.jena.sparql.util.Context;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.apache.jena.fuseki.servlets.FusekiFilter;
 import org.apache.jena.fuseki.system.FusekiLogging;
@@ -52,6 +53,8 @@ public static void withGui()
 {
 	 String[] args = {};
 	  FusekiCmd.main(args);
+	  // never reaches this
+	
 }
 
 

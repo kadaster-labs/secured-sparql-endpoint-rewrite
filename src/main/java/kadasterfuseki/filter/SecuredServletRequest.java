@@ -20,8 +20,6 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 		super(request);
 		try
 		{
-		
-			
 				Query q  = QueryFactory.create(query);
 				User user =UserFactory.getUser(request,query);
 				if (user!=null)
@@ -34,9 +32,9 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 				
 				try
 				{
-				SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
-				log.addQueries(query, esq.query.toString(), user);
-				System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
+					SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+					log.addQueries(query, esq.query.toString(), user);
+					//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
 				}
 				catch(Exception e)
 				{
