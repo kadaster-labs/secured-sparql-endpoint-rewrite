@@ -22,7 +22,45 @@ public class UserFactory {
 	private static Hashtable<String, UserDB> endpoint_userdb = new Hashtable<String, UserDB>();
 	
  	
-	public static User getUser(HttpServletRequest request,String query)
+	
+	public static User getUser(HttpServletRequest request)
+	{
+		
+		String servletPath=request.getServletPath();
+		String repo  =servletPath.split("/")[1];
+		
+		
+		if (false)
+		/// ah well..
+		{
+			if  ( (!repo.equalsIgnoreCase("unlocked")) && (!repo.equalsIgnoreCase("unlockedInMem")) )
+			{
+				return null;
+			}
+		}
+		
+		String personaV2=(String) request.getParameter("persona");
+		if (personaV2!=null)
+		{
+			if (personaV2.equalsIgnoreCase(UserDB.SystemPersona))
+			{
+				//System.out.println("found system persona");
+				return createAll();
+			}
+			// new
+			 return getPersona2FromDB(request,personaV2);
+		}
+		else
+		{
+			System.out.println("found anonymous user");
+			 return getPersona2FromDB(request,"anonymous");
+		}
+				
+		
+	
+	}
+	
+	public static User getUser_old(HttpServletRequest request,String query)
 	{
 		
 		String servletPath=request.getServletPath();
@@ -49,33 +87,35 @@ public class UserFactory {
 			 return getPersona2FromDB(request,personaV2);
 		}
 		
-		
-		// old
-		try
-		{ 
-			
-			  String regexPattern ="#persona_.*[\\s;]";
-			  Pattern pattern = Pattern.compile(regexPattern);
-			  Matcher matcher = pattern.matcher(query.toLowerCase());
-			  if (matcher.find())
-			  {
-				  String usertype =matcher.group();
-				  usertype=usertype.replace("#persona_","").trim();
-				  usertype=usertype.replace(";","");
-				  return createUser(usertype);
-			  }
-			
-			  
-		}
-		catch(Exception e)
+		if (false)
 		{
-			e.printStackTrace();
+			// old
+			try
+			{ 
+				
+				  String regexPattern ="#persona_.*[\\s;]";
+				  Pattern pattern = Pattern.compile(regexPattern);
+				  Matcher matcher = pattern.matcher(query.toLowerCase());
+				  if (matcher.find())
+				  {
+					  String usertype =matcher.group();
+					  usertype=usertype.replace("#persona_","").trim();
+					  usertype=usertype.replace(";","");
+					//  return createUser(usertype);
+				  }
+				
+				  
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		return createAnonymous();
 	}
 	
-	private User old(Query query) {
+	private User old2(Query query) {
 		try
 		{
 			
@@ -113,31 +153,29 @@ public class UserFactory {
 	
 	private static User getPersona2FromDB(HttpServletRequest request,String type)
 	{
-		
-		
-	
         String repo = getRepo(request);
-        
-    
-        UserDB userDB=endpoint_userdb.get(request);
+        UserDB userDB=endpoint_userdb.get(repo);
         if (userDB==null)
         {
         	userDB=new UserDB(request);
         	endpoint_userdb.put(repo, userDB);
         }
-        
-	
-		User user =userDB.getUser(type);
+    	User user =userDB.getUser(type);
 		if (user!=null) return user;
-		
 		System.err.println("unknown user "+type);
-		
-		return createAnonymous();
+		return createAnonymousFromDB(request);
+	}
+	
+	
+	private static User createAnonymousFromDB(HttpServletRequest request)
+	{
+     return getPersona2FromDB(request, "anonymous");
 	}
 	
 	
 	
-	private static User createUser(String type)
+	
+	private static User createUser_old(String type)
 	{
 		
 		if (type==null)

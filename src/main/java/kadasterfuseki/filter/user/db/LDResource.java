@@ -71,8 +71,9 @@ public class LDResource {
 		try
 		{
 			//Object o=pred_v.get("http://www.w3.org/2000/01/rdf-schema#label");
-			
-			return pred_v.get(pred).firstElement().toString();
+			String value = pred_v.get(pred).firstElement().toString();
+			if (value.contains("^^"))value=value.split("\\^\\^")[0];
+			return value;
 		}
 		catch(Exception e) {e.printStackTrace();}
 		return null;

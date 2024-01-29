@@ -21,27 +21,27 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 		try
 		{
 				Query q  = QueryFactory.create(query);
-				User user =UserFactory.getUser(request,query);
+				User user =UserFactory.getUser(request);
 				if (user!=null)
 				{
 				
-				RewriteSparqlEngine esq = new RewriteSparqlEngine(q, user);
-				this.squery=esq.query.toString();
+					RewriteSparqlEngine esq = new RewriteSparqlEngine(q, user);
+					this.squery=esq.query.toString();
 			
 				//.getServletPath()
 				
-				try
-				{
-					SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
-					log.addQueries(query, esq.query.toString(), user);
-					//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
-				}
-				catch(Exception e)
-				{
-					System.err.println("logging error");
-					e.printStackTrace();
-				}
-			}
+					try
+					{
+						SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+						log.addQueries(query, esq.query.toString(), user);
+						//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
+					}
+					catch(Exception e)
+					{
+						System.err.println("logging error");
+						e.printStackTrace();
+					}
+			 }
 			else
 			{
 				

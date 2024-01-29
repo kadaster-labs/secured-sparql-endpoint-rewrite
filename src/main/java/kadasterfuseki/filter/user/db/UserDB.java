@@ -31,8 +31,8 @@ public class UserDB {
 	        String met =request.getMethod();
 	        String endpoint =met+ localHost+":"+localPort+"/"+path;
 	        String repo = path.toLowerCase().replace("/sparql", "").replace("/query", "").replace("/","");
-	        System.out.println(endpoint);
-	        endpoint=request.getRequestURL().toString();
+	     
+	        endpoint=request.getRequestURL().toString()+"?persona="+UserDB.SystemPersona;
 	        
 	        create(endpoint);
 	        
@@ -65,8 +65,9 @@ public class UserDB {
 		{
 			LDResource r=new LDResource(ta,uri);
 			User user =new User(r.getFirstLabel());
-			userdb.put(r.getFirstLabel(), user);
 			
+			userdb.put(r.getFirstLabel(), user);
+             System.out.println("creating user "+r.getFirstLabel());			
 		
 			Vector<LDResource> roles=r.getRelations(LDResource.baseAuth+"has_role");
 			for (LDResource rol:roles)
@@ -108,6 +109,7 @@ public class UserDB {
 		    {
 		            if (graph.contains(LDResource.baseAuth+"part_of_dataset",dataset.uri))
 		            		{
+		            				 
 		            	        user.allowedGraphs.add(graph.getFirstAsString(LDResource.baseAuth+"graph"));
 		            	        
 		            		}
