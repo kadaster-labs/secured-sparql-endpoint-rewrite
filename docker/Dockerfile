@@ -69,6 +69,10 @@ RUN ./download.sh --chksum sha1 "$WAR_URL"
 
 ## unpack war to webapp
 RUN jar xf ${FUSEKI_WEBAPP_WAR}
+
+## copy local resources over extracted webapp
+COPY ./src/webapp .
+
 WORKDIR $FUSEKI_DIR
 
 ## -- Alternatives to download : copy already downloaded.
