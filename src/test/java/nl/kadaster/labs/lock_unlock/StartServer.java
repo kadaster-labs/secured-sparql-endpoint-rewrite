@@ -1,116 +1,59 @@
 package nl.kadaster.labs.lock_unlock;
 
-import java.util.EnumSet;
-
-import javax.net.ssl.TrustManager;
-import javax.servlet.DispatcherType;
-
-import org.apache.jena.fuseki.Fuseki;
-import org.apache.jena.fuseki.cmd.FusekiArgs;
 import org.apache.jena.fuseki.cmd.FusekiCmd;
-import org.apache.jena.fuseki.cmd.JettyServerConfig;
-import org.apache.jena.fuseki.main.FusekiServer.Builder;
-import org.apache.jena.fuseki.main.JettyServer;
-import org.apache.jena.fuseki.main.cmds.FusekiMain;
-import org.apache.jena.fuseki.main.cmds.FusekiMainCmd;
 import org.apache.jena.fuseki.main.FusekiServer;
-import org.apache.jena.sparql.engine.QueryEngineRegistry;
-import org.apache.jena.sparql.util.Context;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.apache.jena.fuseki.servlets.FusekiFilter;
-import org.apache.jena.fuseki.system.FusekiLogging;
-
+import org.apache.jena.fuseki.main.FusekiServer.Builder;
+import org.apache.jena.fuseki.main.cmds.FusekiMain;
 
 import kadasterfuseki.filter.LockedServletFilter;
 
-
 public class StartServer {
-	
-	
-	
-public static void serverWithoutGui()
-{
-	//FUSEKI_HOME=C:\DSchijf\dbdata\fusekidb
-	//[2023-12-28 13:22:45] Config     INFO  FUSEKI_BASE=C:\DSchijf\dbdata\fusekidb
-	System.out.println("start server");
 
-	 FusekiLogging.setLogging();
-	Builder builder= FusekiServer.create();
-	builder.port(3030).verbose(true).addFilter("/*",new LockedServletFilter()).enableCors(true);
-	//builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb/config.ttl");
-	builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb\\configuration/unlocked.ttl");
+	public static void withGui() {
+		String[] args = {
+				"--conf=src/test/resources/config.ttl",
+		};
+		FusekiCmd.main(args);
+	}
 
-	FusekiServer server  = builder.build();
+	public static void main(String[] _args) {
+		withGui();
+	}
 
-	
-	
-	server.start();
-	server.join();
-	System.out.println("end server");
-	
-}
-public static void withGui()
-{
-	 String[] args = {};
-	  FusekiCmd.main(args);
-	  // never reaches this
-	
-}
+	public static void test() {
+		// String[] args = { "--mem", "/ds" };
 
+		// System.out.println("hallo");
+		if (false) {
+			// old
+			// Fuseki.init(); // so that the new queryengine filter sticks.
+			// QueryEngineRegistry.addFactory(new LockedQueryEngineFactory());
+		}
 
-    public static void main(String[] _args)
-    {
-    //	System.out.println("disable shit");
-    //	System.setProperty("com.sun.net.ssl.checkRevocation", "false");
-    //	System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
-    	//System.setProperty("javax.net.debug", "all");
-    	withGui();
-    }
-    public static void test()
-    {
-        //String[] args = { "--mem", "/ds" };
-    	
-    	//System.out.println("hallo");
-    	if (false)
-    	{
-    		//old
-    	//	Fuseki.init(); // so that the new queryengine filter sticks.
-    	//	QueryEngineRegistry.addFactory(new LockedQueryEngineFactory());
-    	}
+		// ServletContextHandler context = new
+		// ServletContextHandler(ServletContextHandler.SESSIONS);
 
-    	
-    	
-    //	  ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-    	  
-    	//  context.addFilter( LockedServletFilter.class, "/*",  EnumSet.of(DispatcherType.REQUEST));
-    	  
-    
-    	
-        String[] args = {"--conf=C:/DSchijf/dbdata/fusekidb/config.ttl", "--ping"};
-   
-        try {
-        	
-        	
-        	
-			Builder builder=FusekiMain.builder(args);
-			builder.port(3030).verbose(true).addFilter("/*",new LockedServletFilter()).enableCors(true);
+		// context.addFilter( LockedServletFilter.class, "/*",
+		// EnumSet.of(DispatcherType.REQUEST));
+
+		String[] args = { "--conf=C:/DSchijf/dbdata/fusekidb/config.ttl", "--ping" };
+
+		try {
+
+			Builder builder = FusekiMain.builder(args);
+			builder.port(3030).verbose(true).addFilter("/*", new LockedServletFilter()).enableCors(true);
 			builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb\\configuration/unlocked.ttl");
-			
-			//builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb\\configuration/unlocked.ttl");
-			FusekiServer fs=builder.build();
+
+			// builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb\\configuration/unlocked.ttl");
+			FusekiServer fs = builder.build();
 			fs.start();
-			
-			
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        //FusekiCmd.main(args);
-        
-        
-      
-      
-       // System.out.println("hallo2");
-    }
+		// FusekiCmd.main(args);
+
+		// System.out.println("hallo2");
+	}
 }
