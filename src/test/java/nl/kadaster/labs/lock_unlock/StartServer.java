@@ -10,25 +10,6 @@ import kadasterfuseki.filter.LockedServletFilter;
 
 public class StartServer {
 
-	public static void serverWithoutGui() {
-		// FUSEKI_HOME=C:\DSchijf\dbdata\fusekidb
-		// [2023-12-28 13:22:45] Config INFO FUSEKI_BASE=C:\DSchijf\dbdata\fusekidb
-		System.out.println("start server");
-
-		FusekiLogging.setLogging();
-		Builder builder = FusekiServer.create();
-		builder.port(3030).verbose(true).addFilter("/*", new LockedServletFilter()).enableCors(true);
-		// builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb/config.ttl");
-		builder.parseConfigFile("C:\\DSchijf\\dbdata\\fusekidb\\configuration/unlocked.ttl");
-
-		FusekiServer server = builder.build();
-
-		server.start();
-		server.join();
-		System.out.println("end server");
-
-	}
-
 	public static void withGui() {
 		String[] args = {
 				"--conf=src/test/resources/config.ttl",
