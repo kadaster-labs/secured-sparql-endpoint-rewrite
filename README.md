@@ -15,6 +15,22 @@ Other relevant repositories of the [Lock-Unlock Project](https://labs.kadaster.n
 - (this repo) [Secured SPARQL Endpoint Rewrite (SPARQL Query)](https://github.com/kadaster-labs/secured-sparql-endpoint-rewrite) (based on Fuseki)
 - [Lock-Unlock Helm Charts](https://github.com/kadaster-labs/lock-unlock-helm-charts)
 
+## Rewrite implementation
+
+This implementation is rewriting the incoming user SPARQL query and adds extra and constraining
+snippets to it. These snippets are based upon the Authorization Configuration available somewhere.
+This is still under discussion. The idea would be that each SPARQL endpoint with data also includes
+their own Authorization Configuration as Linked Data.
+
+This experimental set up is building the [Apache Jena
+Fuseki2](https://jena.apache.org/documentation/fuseki2/) server. To apply the authorization
+rewriting of the incoming SPARQL queries in 'the Fuseki style' would mean a
+[FusekiAutoModule](https://jena.apache.org/documentation/fuseki2/fuseki-modules.html#automatically-loaded).
+Although this might seem a great way there's still prototyping ongoing which is needed inside the
+Fuseki development to get this working; see [JENA-2106](https://github.com/apache/jena/issues/2106).
+Therefor this implementation simply adds a custom servlet directly into the `web.xml`. This is
+originally extracted from the `jena-fuseki-fulljar:4.10.0`.
+
 ## Development
 
 To build locally use [Maven](https://sdkman.io/sdks#maven):

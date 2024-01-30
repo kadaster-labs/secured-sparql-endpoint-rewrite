@@ -2,6 +2,7 @@
 target/
 bin/
 dependency-reduced-pom.xml
+.classpath
 
 ## Fuseki stuff
 run/
