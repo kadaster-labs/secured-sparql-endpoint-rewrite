@@ -4,7 +4,6 @@ import org.apache.jena.fuseki.cmd.FusekiCmd;
 import org.apache.jena.fuseki.main.FusekiServer;
 import org.apache.jena.fuseki.main.FusekiServer.Builder;
 import org.apache.jena.fuseki.main.cmds.FusekiMain;
-import org.apache.jena.fuseki.system.FusekiLogging;
 
 import kadasterfuseki.filter.LockedServletFilter;
 
