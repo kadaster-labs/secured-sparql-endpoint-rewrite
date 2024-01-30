@@ -20,8 +20,8 @@ public class SecureService {
 			el.visit(sev);
 			if (sev.runThisQuery==false)
 			{
-				System.out.println("should not run this query because of faulty service clause");
-				query.setLimit(0);
+			//	System.out.println("should not run this query because of faulty service clause");
+				//query.setLimit(0);
 			}
 			
 			
