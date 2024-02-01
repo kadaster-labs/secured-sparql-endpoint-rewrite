@@ -6,7 +6,7 @@
   <groupId>nl.kadaster.labs.lock_unlock</groupId>
   <name>Lock-Unlock Project - Secured Fuseki Server</name>
   <artifactId>lock-unlock-rewrite</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
 
   <packaging>jar</packaging>
   <description>Lock-Unlock Fuseki server - combined jar with built-in webserver.</description>

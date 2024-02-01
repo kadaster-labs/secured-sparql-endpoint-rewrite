@@ -18,17 +18,17 @@ Differences with the original `Dockerfile`:
 Use the published image by:
 
 ```bash
-$ docker pull <azure-container-registry>/lock-unlock/rewrite:0.1.1
+$ docker pull <azure-container-registry>/lock-unlock/rewrite:0.1.2
 ```
 
 Local build (run in the root of this repo):
 
 ```bash
-$ docker build --build-arg JENA_VERSION=4.10.0 --build-arg LOCK_UNLOCK_VERSION=0.1.1 -t lock-unlock/rewrite:0.1.1 -f docker/Dockerfile .
+$ docker build --build-arg JENA_VERSION=4.10.0 --build-arg LOCK_UNLOCK_VERSION=0.1.2 -t lock-unlock/rewrite:0.1.2 -f docker/Dockerfile .
 ```
 
 Running (just) the docker container:
 
 ```bash
-$ docker run -i --rm -p "3030:3030" --name LockUnlockFusekiServer -t lock-unlock/rewrite:0.1.1 --mem /ds
+$ docker run -i --rm -p "3030:3030" --name LockUnlockFusekiServer -t lock-unlock/rewrite:0.1.2 --mem /ds
 ```
