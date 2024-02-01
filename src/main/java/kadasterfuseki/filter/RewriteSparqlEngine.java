@@ -40,9 +40,12 @@ public class RewriteSparqlEngine
 	   {
 		   processGraphs();
 	   }
-	   if (user.serviceFilters.size()>0)
+	   if (false)
 	   {
-		   processServiceFilters();
+		   if (user.serviceFilters.size()>0)
+		   {
+			   processServiceFilters();
+		   }
 	   }
 	  
 	}
