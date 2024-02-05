@@ -3,6 +3,9 @@ package kadasterfuseki.logging;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
@@ -35,6 +38,13 @@ public class SparqlLogging {
 		return logPersona;
 	}
 	
+	public static void addLog(HttpServletRequest request, String logString)
+	{
+		new SparqlLogging(request.getRequestURL().toString()).addLog(logString);
+		
+		
+	}
+	
 	
 	public SparqlLogging(String endpoint)
 	{
@@ -45,8 +55,23 @@ public class SparqlLogging {
 	     uri="<http://labs.kadaster.nl/logging/log"+UUID.randomUUID().toString()+">";
 	    
 	}
+	public void addLog(String msg)
+	{
+		  String updateQuery="INSERT DATA {graph<"+graph+">{ "+uri+" a <https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/AppEvent>."
+					+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/message> \""+msg+"\"."
+							+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/date> "+getDate()+"."
+		  		+ "}}";
+		 UpdateProcessor processor = UpdateExecutionFactory.createRemote(
+	                UpdateFactory.create(updateQuery),
+	                endpoint
+	        );
+
+	        // Execute the update
+	        processor.execute();
+		
+	}
 	
-	public void addQueries(String query, String pquery,User user)
+	public String getDate()
 	{
 		Date d = new Date();
 		int m=d.getMonth()+1;
@@ -65,6 +90,12 @@ public class SparqlLogging {
 		if (d.getSeconds()<10) sS="0"+sS;
 		
 		String date=(d.getYear()+1900)+"-"+ms+"-"+dayS+"T"+hourS+":"+minS+":"+sS+".000";
+		return "\""+date+"\"^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+	}
+	
+	public void addQueries(String query, String pquery,User user)
+	{
+		
 		query=StringEscapeUtils.escapeJava(query);
 		pquery=StringEscapeUtils.escapeJava(pquery);
 				
@@ -72,7 +103,7 @@ public class SparqlLogging {
         		+ uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/by_user> <"+user.getUri()+">."
         				+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/sparqlquery> \""+query+"\"."
         				+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/executedQuery> \""+pquery+"\"."
-        				+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/startDate> \""+date+"\"^^<http://www.w3.org/2001/XMLSchema#dateTime>."
+        				+uri+"<https://data.federatief.datastelsel.nl/lock-unlock/logging/model/def/startDate> "+getDate()+"."
         				
         						+ "  }}";
      //   System.out.println(updateQuery);

@@ -28,6 +28,8 @@ public class LockedServletFilter extends FusekiFilter {
 		// TODO Auto-generated method stub
 		super.init(filterConfig);
 		 Fuseki.serverLog.info("Add Kadaster Lock-Unlock Authorization filter version 0.6");
+		
+		
 		 
 		 
 		

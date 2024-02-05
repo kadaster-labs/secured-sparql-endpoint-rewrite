@@ -30,15 +30,6 @@ public class UserFactory {
 		String repo  =servletPath.split("/")[1];
 		
 		
-		if (false)
-		/// ah well..
-		{
-			if  ( (!repo.equalsIgnoreCase("unlocked")) && (!repo.equalsIgnoreCase("unlockedInMem")) )
-			{
-				return null;
-			}
-		}
-		
 		String personaV2=(String) request.getParameter("persona");
 		if (personaV2!=null)
 		{
@@ -52,7 +43,7 @@ public class UserFactory {
 		}
 		else
 		{
-			System.out.println("found anonymous user");
+		//	System.out.println("found anonymous user");
 			 return getPersona2FromDB(request,"anonymous");
 		}
 				
@@ -158,6 +149,7 @@ public class UserFactory {
         if (userDB==null)
         {
         	userDB=new UserDB(request);
+        	
         	endpoint_userdb.put(repo, userDB);
         }
     	User user =userDB.getUser(type);

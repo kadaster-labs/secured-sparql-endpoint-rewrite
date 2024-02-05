@@ -16,6 +16,7 @@ import org.apache.jena.update.UpdateProcessor;
 import kadasterfuseki.filter.user.HorizontalFilter;
 import kadasterfuseki.filter.user.PredicateFilter;
 import kadasterfuseki.filter.user.User;
+import kadasterfuseki.logging.SparqlLogging;
 
 public class UserDB {
 
@@ -35,6 +36,10 @@ public class UserDB {
 	        endpoint=request.getRequestURL().toString()+"?persona="+UserDB.SystemPersona;
 	        
 	        create(endpoint);
+	        
+	        SparqlLogging.addLog(request, "loading users (v0.5)");
+	        
+	        
 	        
 		}
 		catch(Exception e)
