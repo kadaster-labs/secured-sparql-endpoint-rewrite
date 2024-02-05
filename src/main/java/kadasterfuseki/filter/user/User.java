@@ -2,6 +2,9 @@ package kadasterfuseki.filter.user;
 
 import java.util.Vector;
 
+import kadasterfuseki.filter.user.db.UserDB;
+import kadasterfuseki.logging.SparqlLogging;
+
 
 
 public class User {
@@ -26,6 +29,12 @@ public class User {
 	 // System.out.println("creating user "+label);
 	 // addTestServiceFilters();
 	  
+	}
+	public boolean isSystem()
+	{
+		if (this.label==UserDB.SystemPersona) return true;
+		if (this.label==SparqlLogging.logPersona) return true;
+		return false;
 	}
 	private void addTestServiceFilters()
 	{

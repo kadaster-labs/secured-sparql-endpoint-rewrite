@@ -142,8 +142,15 @@ public class UserFactory {
 	      return repo;
 	}
 	
-	private static User getPersona2FromDB(HttpServletRequest request,String type)
+	public static User getPersona2FromDB(HttpServletRequest request,String type)
 	{
+		
+		if (type.equalsIgnoreCase(UserDB.SystemPersona))
+		{
+			System.out.println("found system persona");
+			return createAll();
+		}
+		
         String repo = getRepo(request);
         UserDB userDB=endpoint_userdb.get(repo);
         if (userDB==null)

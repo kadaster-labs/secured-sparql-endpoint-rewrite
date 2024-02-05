@@ -2,11 +2,14 @@ package kadasterfuseki.filter;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.syntax.Element;
 
+import kadasterfuseki.filter.impl.BaseFilter;
 import kadasterfuseki.filter.impl.graphs.SecureGraphs;
 import kadasterfuseki.filter.impl.horizontal.AddendumHorizontal;
 import kadasterfuseki.filter.impl.predicates.SecuredElementVisitor;
@@ -20,12 +23,24 @@ public class RewriteSparqlEngine
 {
  public Query query = null;
  User user=null;
+ String endpoint = null;
+ HttpServletRequest request=null;
 
  
-	public RewriteSparqlEngine(Query query,User user) 
+	public RewriteSparqlEngine(HttpServletRequest request,Query query,User user, String endpoint) 
 	{
 	   this.query=query;
 	   this.user=user;
+	   this.endpoint=endpoint;
+	   this.request=request;
+	   
+	   
+		BaseFilter bf = new BaseFilter(request,query, user, endpoint);
+		this.user=bf.user;
+		this.query=bf.query;
+		query=bf.query;
+		user=this.user;
+	   
 	 
 	   if (user.performHorizontalFilters)
 	   {
@@ -74,7 +89,7 @@ public class RewriteSparqlEngine
 	
 	private void processGraphs()
 	{
-		new SecureGraphs(query,user);
+		this.query= new SecureGraphs(this.request  ,query,user,endpoint).query;
 	}
 	
 	private void processPredicates()

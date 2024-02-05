@@ -38,6 +38,9 @@ ServiceFilter serviceFilter=null;
 		this.serviceFilter=sf;
 	}
 
+	public Vector<String> foundNotAllowedServices =new Vector<String>();
+	public Vector<String> foundNotAllowedServicesStartingWith =new Vector<String>();
+
 	
 	@Override
 	public void visit(ElementService el) {
@@ -52,7 +55,8 @@ ServiceFilter serviceFilter=null;
 			{
 				System.out.println("Not doing this. parameter as service. Could be implemented");
 				runThisQuery=false;
-				return;
+				
+				
 			}
 			
 			if (this.serviceFilter.notAllowedServices!=null)
@@ -63,7 +67,8 @@ ServiceFilter serviceFilter=null;
 					{
 						System.out.println("found an illegal service");
 						runThisQuery=false;
-						return;
+						foundNotAllowedServices.add(service);
+						
 					}
 				}
 			}
@@ -76,13 +81,12 @@ ServiceFilter serviceFilter=null;
 					{
 						System.out.println("found an illegal starswith service");
 						runThisQuery=false;
-						return;
+						foundNotAllowedServicesStartingWith.add(service);
+						
 					}
 				}
 			}
-			
-			
-			
+				
 		}
 		catch(Exception e)
 		{
@@ -241,7 +245,8 @@ ServiceFilter serviceFilter=null;
 	@Override
 	public void visit(ElementSubQuery el) {
 		// TODO Auto-generated method stub
-		el.visit(this);
+		
+		el.getQuery().getQueryPattern().visit(this);
 		
 	}
 

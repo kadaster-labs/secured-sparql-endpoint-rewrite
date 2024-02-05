@@ -54,10 +54,10 @@ public class LockedServletFilter extends FusekiFilter {
 				if (query!=null)
 				{
 					
-										
+					   		
 					    //System.out.println("user call so applying filters ");
 						SecuredServletRequest ssr=new SecuredServletRequest(r2,query);
-						chain.doFilter(ssr, response);
+						chain.doFilter(ssr, response);		
 						return;
 					
 				}
@@ -71,8 +71,8 @@ public class LockedServletFilter extends FusekiFilter {
 					}
 					else
 					{
-						chain.doFilter(null, response);
-						return;
+						//chain.doFilter(null, response);
+					//	return;
 						
 					}
 				}

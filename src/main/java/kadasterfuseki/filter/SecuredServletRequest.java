@@ -13,6 +13,15 @@ import kadasterfuseki.logging.SparqlLogging;
 
 public class SecuredServletRequest extends HttpServletRequestWrapper {
 
+	@Override
+	public String getQueryString() {
+		// TODO Auto-generated method stub
+		
+		String s =super.getQueryString();
+		System.out.println(s);
+		return super.getQueryString();
+	}
+
 	String squery=null;
 	
 	public SecuredServletRequest(HttpServletRequest request,String query)
@@ -20,20 +29,21 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 		super(request);
 		try
 		{
+			String endpoint =request.getRequestURL().toString();
 				Query q  = QueryFactory.create(query);
 				User user =UserFactory.getUser(request);
 				if (user!=null)
 				{
 				
-					RewriteSparqlEngine esq = new RewriteSparqlEngine(q, user);
+					RewriteSparqlEngine esq = new RewriteSparqlEngine(request,q, user,endpoint);
 					this.squery=esq.query.toString();
-			
-				//.getServletPath()
-				
 					try
 					{
-						SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
-						log.addQueries(query, esq.query.toString(), user);
+						if (!user.isSystem())
+						{
+							SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+							log.addQueries(query, esq.query.toString(), user);
+						}
 						//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
 					}
 					catch(Exception e)
@@ -44,12 +54,8 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 			 }
 			else
 			{
-				
 				this.squery=query;
 			}
-			
-			
-			
 		}
 		catch(QueryParseException e)
 		{
@@ -60,8 +66,6 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 			e.printStackTrace();
 		
 		}
-		
-		
 	}
 
 	@Override
@@ -78,6 +82,12 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 	public String[] getParameterValues(String name) {
 		// TODO Auto-generated method stub
 		//System.out.println("get aprameter values "+name);
+		if (name.equalsIgnoreCase("query"))
+		{
+			String[] s=super.getParameterValues(name);
+		//	System.out.println(s);
+			
+		}
 		return super.getParameterValues(name);
 	}
 	
