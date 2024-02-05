@@ -23,8 +23,8 @@ public class User {
 	{
 	  this.label=label;
 	  this.uri+=label;
-	  System.out.println("creating user "+label);
-	  addTestServiceFilters();
+	 // System.out.println("creating user "+label);
+	 // addTestServiceFilters();
 	  
 	}
 	private void addTestServiceFilters()
