@@ -24,9 +24,22 @@ public class SparqlLogging {
 	String graph="http://labs.kadaster.nl/logging";
 	String uri=null;
 	
+	public static String logPersona=null;
+	
+	public static String getLogPersona()
+	{
+		if (logPersona==null)
+		{
+			logPersona=UUID.randomUUID().toString();
+		}
+		return logPersona;
+	}
+	
+	
 	public SparqlLogging(String endpoint)
 	{
-		this.endpoint=endpoint.replace("/query","").replace("/sparql", "");
+		endpoint = endpoint.split("\\?")[0];
+		this.endpoint=endpoint.replace("/query","").replace("/sparql", "")+"?persona="+getLogPersona();
 		
 		//System.out.println("endpoint is "+this.endpoint);
 	     uri="<http://labs.kadaster.nl/logging/log"+UUID.randomUUID().toString()+">";

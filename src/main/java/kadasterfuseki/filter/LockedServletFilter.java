@@ -13,6 +13,10 @@ import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.fuseki.servlets.FusekiFilter;
 import org.apache.jena.sparql.util.Context;
 
+import kadasterfuseki.filter.user.User;
+import kadasterfuseki.filter.user.UserFactory;
+import kadasterfuseki.logging.SparqlLogging;
+
 public class LockedServletFilter extends FusekiFilter {
 
 	public LockedServletFilter() {
@@ -23,7 +27,7 @@ public class LockedServletFilter extends FusekiFilter {
 	public void init(FilterConfig filterConfig) {
 		// TODO Auto-generated method stub
 		super.init(filterConfig);
-		 Fuseki.serverLog.info("Add Kadaster Lock-Unlock Authorization filter version 0.4");
+		 Fuseki.serverLog.info("Add Kadaster Lock-Unlock Authorization filter version 0.6");
 		 
 		 
 		
@@ -42,6 +46,7 @@ public class LockedServletFilter extends FusekiFilter {
 			if (url.endsWith("ping")) return;
 		
 			
+			
 				String query =r2.getParameter("query");
 				
 				if (query!=null)
@@ -54,6 +59,23 @@ public class LockedServletFilter extends FusekiFilter {
 						return;
 					
 				}
+				String update =r2.getParameter("update");
+				if (update!=null)
+				{
+					String personaV2=(String) request.getParameter("persona");
+					if (personaV2==SparqlLogging.getLogPersona())
+					{
+						System.out.println("continue");
+					}
+					else
+					{
+						chain.doFilter(null, response);
+						return;
+						
+					}
+				}
+			
+				
 				
 				//r2.setAttribute("query", );
 				
