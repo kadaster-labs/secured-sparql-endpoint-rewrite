@@ -1,5 +1,6 @@
 package kadasterfuseki.filter.impl;
 
+import java.net.URL;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,20 @@ public class BaseFilter {
 	
 	public void checkSelf()
 	{
+		try
+		{
 		Vector<String> sfv =new Vector<String>();
-		sfv.add(endpoint.split("\\?")[0]);
+		
+	  
+	     String url=request.getRequestURL().toString();
+	     URL url2  = new URL(url);
+	     String x  = url2.getProtocol()+"://"+url2.getHost();
+		
+		sfv.add(x);
+		
 		String type =null;
 		
 	
-		
-		
-		
 		ServiceFilter sf= new ServiceFilter(null,sfv);
 		SecuredElementVisitorForSecuredServices f= new SecuredElementVisitorForSecuredServices(sf);
 		query.getQueryPattern().visit(f);
@@ -57,6 +64,8 @@ public class BaseFilter {
 			if (type!=null) 
 				{this.user= UserFactory.getPersona2FromDB(request, type);}
 		}
+		}
+		catch(Exception e) {}
 	}
 	
 

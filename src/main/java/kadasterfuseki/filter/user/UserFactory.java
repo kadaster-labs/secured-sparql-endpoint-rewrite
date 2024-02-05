@@ -147,7 +147,7 @@ public class UserFactory {
 		
 		if (type.equalsIgnoreCase(UserDB.SystemPersona))
 		{
-			System.out.println("found system persona");
+		//	System.out.println("found system persona");
 			return createAll();
 		}
 		

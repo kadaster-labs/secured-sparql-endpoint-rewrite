@@ -72,6 +72,8 @@ public class UserDB {
 			User user =new User(r.getFirstLabel());
 			
 			userdb.put(r.getFirstLabel(), user);
+			userdb.put(r.getFirstLabel().toLowerCase(), user);
+			
              System.out.println("creating user "+r.getFirstLabel());			
 		
 			Vector<LDResource> roles=r.getRelations(LDResource.baseAuth+"has_role");
@@ -148,7 +150,16 @@ public class UserDB {
 	
 	public User getUser(String type)
 	{
-		return userdb.get(type);
+		User u=userdb.get(type);
+		if (u!=null) return u;
+		
+		try {
+			 u=userdb.get(type.toLowerCase());
+			return u;
+		}
+		catch(Exception e) {}
+		return null;
+		 
 	}
 
 	public static String SystemPersona="System";
