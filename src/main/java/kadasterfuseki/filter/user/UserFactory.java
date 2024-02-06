@@ -156,7 +156,6 @@ public class UserFactory {
         if (userDB==null)
         {
         	userDB=new UserDB(request);
-        	
         	endpoint_userdb.put(repo, userDB);
         }
     	User user =userDB.getUser(type);

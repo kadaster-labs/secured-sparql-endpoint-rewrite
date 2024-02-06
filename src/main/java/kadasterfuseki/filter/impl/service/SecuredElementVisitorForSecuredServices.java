@@ -65,7 +65,7 @@ ServiceFilter serviceFilter=null;
 				{
 					if (filterS.equalsIgnoreCase(service))
 					{
-						System.out.println("found an illegal service");
+						//System.out.println("found an illegal service");
 						runThisQuery=false;
 						foundNotAllowedServices.add(service);
 						
@@ -77,7 +77,7 @@ ServiceFilter serviceFilter=null;
 			    service = service.toLowerCase();
 				for (String filterS:this.serviceFilter.notAllowedStartingWith)
 				{
-					if (service.toLowerCase().startsWith(service))
+					if (service.toLowerCase().startsWith(filterS))
 					{
 						System.out.println("found an illegal starswith service");
 						runThisQuery=false;
