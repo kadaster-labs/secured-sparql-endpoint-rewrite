@@ -9,6 +9,8 @@ import org.apache.jena.query.QueryParseException;
 
 import kadasterfuseki.filter.user.User;
 import kadasterfuseki.filter.user.UserFactory;
+import kadasterfuseki.filter.user.db.TAccess;
+import kadasterfuseki.filter.user.db.UserDB;
 import kadasterfuseki.logging.SparqlLogging;
 
 public class SecuredServletRequest extends HttpServletRequestWrapper {
@@ -39,11 +41,19 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 					this.squery=esq.query.toString();
 					try
 					{
-						if (!user.isSystem())
-						{
-							SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
-							log.addQueries(query, esq.query.toString(), user);
-						}
+						endpoint=endpoint.split("\\?")[0];
+						
+						TAccess ta =new TAccess(endpoint+"?persona="+UserDB.SystemPersona);
+					
+							if (!user.isSystem())
+							{
+								if (SparqlLogging.shouldLog(ta))
+								{
+								 SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+								 log.addQueries(query, esq.query.toString(), user);
+								}
+							}
+						
 						//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
 					}
 					catch(Exception e)

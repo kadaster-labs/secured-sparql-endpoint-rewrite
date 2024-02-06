@@ -18,6 +18,7 @@ public class StartServer {
 
 	public static void main(String[] _args) {
 		withGui();
+		//FusekiCmd.main(_args);
 	}
 
 	public static void test() {

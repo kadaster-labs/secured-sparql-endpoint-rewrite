@@ -26,25 +26,23 @@ public class UserDB {
 	{
 		try
 		{
+			System.out.println("setting up userdb");
 			String localHost = request.getLocalAddr();
 	        int localPort = request.getLocalPort();
 	        String path = request.getRequestURI();
 	        String met =request.getMethod();
 	        String endpoint =met+ localHost+":"+localPort+"/"+path;
 	        String repo = path.toLowerCase().replace("/sparql", "").replace("/query", "").replace("/","");
-	     
 	        endpoint=request.getRequestURL().toString()+"?persona="+UserDB.SystemPersona;
-	        
 	        create(endpoint);
-	        
+	        System.out.println("user db ready");
 	        SparqlLogging.addLog(request, "loading users (v0.5)");
-	        
 	        
 	        
 		}
 		catch(Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	

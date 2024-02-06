@@ -33,6 +33,7 @@ public class User {
 	public boolean isSystem()
 	{
 		if (this.label==UserDB.SystemPersona) return true;
+		if (this.label=="all") return true;
 		if (this.label==SparqlLogging.logPersona) return true;
 		return false;
 	}

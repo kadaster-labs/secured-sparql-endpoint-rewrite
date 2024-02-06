@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.modify.request.UpdateAdd;
 import org.apache.jena.update.Update;
@@ -18,6 +19,7 @@ import org.apache.jena.update.UpdateFactory;
 import org.apache.jena.update.UpdateProcessor;
 
 import kadasterfuseki.filter.user.User;
+import kadasterfuseki.filter.user.db.TAccess;
 
 
 
@@ -36,6 +38,21 @@ public class SparqlLogging {
 			logPersona=UUID.randomUUID().toString();
 		}
 		return logPersona;
+	}
+	
+	public static boolean shouldLog(TAccess ta)
+	{
+		try
+		{
+			ResultSet r=ta.select("select distinct ?a where {graph <http://log.log/log>  {?a ?b ?c}} limit 1");
+			if (r.hasNext()) return true;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public static void addLog(HttpServletRequest request, String logString)

@@ -15,6 +15,7 @@ import org.apache.jena.sparql.util.Context;
 
 import kadasterfuseki.filter.user.User;
 import kadasterfuseki.filter.user.UserFactory;
+import kadasterfuseki.filter.user.db.UserDB;
 import kadasterfuseki.logging.SparqlLogging;
 
 public class LockedServletFilter extends FusekiFilter {
@@ -55,7 +56,7 @@ public class LockedServletFilter extends FusekiFilter {
 				{
 					
 					   		
-					    //System.out.println("user call so applying filters ");
+					    System.out.println("user call so applying filters "+query);
 						SecuredServletRequest ssr=new SecuredServletRequest(r2,query);
 						chain.doFilter(ssr, response);		
 						return;
@@ -65,12 +66,22 @@ public class LockedServletFilter extends FusekiFilter {
 				if (update!=null)
 				{
 					String personaV2=(String) request.getParameter("persona");
+					System.out.println("found an update using persona "+personaV2);
 					if (personaV2==SparqlLogging.getLogPersona())
 					{
-						System.out.println("continue");
+						System.out.println("continue update for log");
 					}
 					else
 					{
+						if (personaV2==UserDB.SystemPersona)
+						{
+							System.out.println("continue update for system");
+						}
+						else
+						{
+							System.out.println("we should not allow this update ");
+							
+						}
 						//chain.doFilter(null, response);
 					//	return;
 						
