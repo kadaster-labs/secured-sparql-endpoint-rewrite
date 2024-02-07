@@ -61,6 +61,7 @@ public class LockedServletFilter extends FusekiFilter {
 						return;
 					
 				}
+				
 				String update =r2.getParameter("update");
 				if (update!=null)
 				{
