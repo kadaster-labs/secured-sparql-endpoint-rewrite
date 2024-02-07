@@ -40,28 +40,28 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 				   if (user.isLogUser()) {this.squery=query; return;}
 					RewriteSparqlEngine esq = new RewriteSparqlEngine(request,q, user,endpoint);
 					this.squery=esq.query.toString();
-					try
+					if ((esq.rewritten) && (esq.user.needsLoging()) )
 					{
-						endpoint=endpoint.split("\\?")[0];
-						
-						
-					
-							if (!user.isSystem())
+							try
 							{
-								TAccess ta =new TAccess(endpoint+"?persona="+SparqlLogging.logPersona);
-								if (SparqlLogging.shouldLog(ta,true))
-								{
-								 SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
-								 log.addQueries(query, esq.query.toString(), user);
-								}
+								endpoint=endpoint.split("\\?")[0];
+								if (!user.isSystem())
+									{
+										TAccess ta =new TAccess(endpoint+"?persona="+SparqlLogging.logPersona);
+										if (SparqlLogging.shouldLog(ta,true))
+										{
+										 SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
+										 log.addQueries(query, esq.query.toString(), user);
+										}
+									}
+								
+								//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
 							}
-						
-						//System.out.println("\n\n rewrite:\n#Persona_All\n"+this.squery+"\n\n");
-					}
-					catch(Exception e)
-					{
-						System.err.println("logging error");
-						e.printStackTrace();
+							catch(Exception e)
+							{
+								System.err.println("logging error");
+								e.printStackTrace();
+							}
 					}
 			 }
 			else

@@ -42,6 +42,8 @@ public class SparqlLogging {
 	
 	public static boolean shouldLog(TAccess ta,boolean b)
 	{
+		return true;
+		/*
 		try
 		{
 			ResultSet r=ta.select("select distinct ?a where {graph <http://log.log/log>  {?a ?b ?c}} limit 1");
@@ -52,7 +54,9 @@ public class SparqlLogging {
 		{
 			e.printStackTrace();
 		}
+		
 		return false;
+		*/
 	}
 	
 	public static void addLog(HttpServletRequest request, String logString)

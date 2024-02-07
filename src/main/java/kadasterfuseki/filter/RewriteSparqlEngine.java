@@ -22,11 +22,11 @@ import kadasterfuseki.filter.user.User;
 public class RewriteSparqlEngine 
 {
  public Query query = null;
- User user=null;
+ public User user=null;
  String endpoint = null;
  HttpServletRequest request=null;
 
- 
+ public boolean rewritten=false;
 	public RewriteSparqlEngine(HttpServletRequest request,Query query,User user, String endpoint) 
 	{
 	   this.query=query;
@@ -41,6 +41,8 @@ public class RewriteSparqlEngine
 		this.query=bf.query;
 		query=bf.query;
 		user=this.user;
+		if (user.isSystem()) return;
+		
 	
 		 if (user.performGraphRestrictions)
 		   {
@@ -65,9 +67,10 @@ public class RewriteSparqlEngine
 	   }
 	   else
 	   {
+		   rewritten=true;
 		   System.out.println("\n\nrewritten query:\n\n "+nQuery+"\n\n");
 	   }
-	   
+		   
 	   
 	   
 	   if (false)
