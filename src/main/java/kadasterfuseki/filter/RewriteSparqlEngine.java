@@ -30,6 +30,7 @@ public class RewriteSparqlEngine
 	public RewriteSparqlEngine(HttpServletRequest request,Query query,User user, String endpoint) 
 	{
 	   this.query=query;
+	   String orgQuery=this.query.toString();
 	   this.user=user;
 	   this.endpoint=endpoint;
 	   this.request=request;
@@ -40,8 +41,12 @@ public class RewriteSparqlEngine
 		this.query=bf.query;
 		query=bf.query;
 		user=this.user;
-	   
-	 
+	
+		 if (user.performGraphRestrictions)
+		   {
+			   processGraphs();
+		   }
+		 
 	   if (user.performHorizontalFilters)
 	   {
 		   processHorizontalFilters();
@@ -51,10 +56,20 @@ public class RewriteSparqlEngine
 		     processPredicates();
 		     
 	   }
-	   if (user.performGraphRestrictions)
+	  
+	   
+	   String nQuery=this.query.toString();
+	   if (nQuery.equalsIgnoreCase(orgQuery)) 
 	   {
-		   processGraphs();
+		   System.out.println("\n\nquery not rewritten\n\n");
 	   }
+	   else
+	   {
+		   System.out.println("\n\nrewritten query:\n\n "+nQuery+"\n\n");
+	   }
+	   
+	   
+	   
 	   if (false)
 	   {
 		   if (user.serviceFilters.size()>0)

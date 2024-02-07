@@ -11,6 +11,7 @@ import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.query.Query;
 
 import kadasterfuseki.filter.user.db.UserDB;
+import kadasterfuseki.logging.SparqlLogging;
 
 public class UserFactory {
 
@@ -37,6 +38,12 @@ public class UserFactory {
 			{
 				//System.out.println("found system persona");
 				return createAll();
+			}
+			if (personaV2.equalsIgnoreCase(SparqlLogging.logPersona))
+			{
+				User u=createAll();
+				u.label=SparqlLogging.logPersona;
+				return u;
 			}
 			// new
 			 return getPersona2FromDB(request,personaV2);
@@ -173,50 +180,9 @@ public class UserFactory {
 	
 	
 	
-	private static User createUser_old(String type)
-	{
-		
-		if (type==null)
-		{
-			return createAnonymous();
-		}
-		if (type.equalsIgnoreCase("admin"))
-		{
-			return createAdmin();
-		}
-		if (type.equalsIgnoreCase("test"))
-		{
-			return createTest();
-		}
-		if (type.equalsIgnoreCase("log"))
-		{
-			return createLogUser();
-		}
-		
-		if (type.equalsIgnoreCase("all"))
-		{
-			return createAll();
-		}
-		if (type.equalsIgnoreCase("Almere"))
-		{
-			return createGemeente("Almere");
-		}
-		
-		if (type.equalsIgnoreCase("Zeewolde"))
-		{
-			return createGemeente("Zeewolde");
-		}
-		if (type.equalsIgnoreCase("koopsom"))
-		{
-			return createKoopsomUser();
-		}
-		
-		
-		
-		return createAnonymous();
-	}
 	
-	private static User createGemeente(String gemeente)
+	
+	private static User createGemeente2(String gemeente)
 	{
 		System.out.println("gemeente user "+gemeente);
 		
@@ -228,8 +194,8 @@ public class UserFactory {
 		if (gemeente.equalsIgnoreCase("zeewolde")) gcode=1156;
 		if (gemeente.equalsIgnoreCase("almere")) gcode=25;
 		
-		u.horizontalFilters.add(new HorizontalFilter("https://data.federatief.datastelsel.nl/lock-unlock/brp/def/NatuurlijkPersoon", "https://data.federatief.datastelsel.nl/lock-unlock/brp/def/heeftVerblijfsplaats","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
-		u.horizontalFilters.add(new HorizontalFilter("http://modellen.geostandaarden.nl/def/imx-geo#Perceel", "https://brk.basisregistraties.overheid.nl/brk2/def/kadastraleGemeente","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
+	//	u.horizontalFilters.add(new HorizontalFilter("https://data.federatief.datastelsel.nl/lock-unlock/brp/def/NatuurlijkPersoon", "https://data.federatief.datastelsel.nl/lock-unlock/brp/def/heeftVerblijfsplaats","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
+	//	u.horizontalFilters.add(new HorizontalFilter("http://modellen.geostandaarden.nl/def/imx-geo#Perceel", "https://brk.basisregistraties.overheid.nl/brk2/def/kadastraleGemeente","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/"+gcode));
 		
 		return u;
 	}
@@ -299,6 +265,7 @@ public class UserFactory {
 		User u = new User("all");
 		u.performGraphRestrictions=false;
 		u.performPredicateRestrictions=false;
+		u.performHorizontalFilters=false;
 		//u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authentication-ontology/graphs/users");
 		//u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authorisation-ontology/graphs/rules");
 		

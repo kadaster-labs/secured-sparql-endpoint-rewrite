@@ -34,9 +34,11 @@ public class SecureGraphs {
 		this.user=user;
 		
 		
-		// Fuseki.serverLog.info("Executing locked/unlocked Graph filter");
+		 SecureGraphsVisitor f=new SecureGraphsVisitor();
+		 query.getQueryPattern().visit(f);
+		 System.out.println("querying the union graph "+f.foundBSPOutsideNamedGraph);
 		
-		
+		 //using from and from named?
 		 if (usesFromGraph())
 		 {
 			if (debug) System.out.println("check 'from' graph query");
@@ -44,8 +46,12 @@ public class SecureGraphs {
 		 }
 		 else
 		 {
-			 if (debug)  System.out.println("add 'from' clause");
 			 addFromGraphs();
+			 if (f.foundBSPOutsideNamedGraph)
+			 {
+				 if (debug)  System.out.println("add 'from' clause");
+				 //addFromGraphs();
+			 }
 		 }
 		 
 		 if (usesFromNamedGraph())
@@ -55,14 +61,17 @@ public class SecureGraphs {
 		 }
 		 else
 		 {
-			 if (debug)  System.out.println("add 'from named' clause");
 			 addFromNamedGraphs();
+			 if (f.foundBSPOutsideNamedGraph)
+			 {
+				 if (debug)  System.out.println("add 'from named' clause");
+				// addFromNamedGraphs();
+			 }
 		 }
 		 
 				 
-		 SecureGraphsVisitor f=new SecureGraphsVisitor();
-		 query.getQueryPattern().visit(f);
-		 if (checkGraphs(f.namedGraphs))
+	
+		 if (!checkGraphs(f.namedGraphs))
 			 {
 			 this.query.setLimit(0);
 			 };
@@ -70,7 +79,7 @@ public class SecureGraphs {
 		 
 		 for (Query q:f.qs)
 		 {
-			 if (checkGraphs(q.getNamedGraphURIs()))
+			 if (!checkGraphs(q.getNamedGraphURIs()))
 			 {
 				 //niet uitvoeren
 				 this.query.setLimit(0);
@@ -86,24 +95,17 @@ public class SecureGraphs {
 	
 	public boolean checkGraphs(List<String> graphs)
 	{
-		Vector<String> remove = new Vector<String>();
-		
 	
 		for (String graph:graphs)
 		{
 			if (!user.allowedGraphs.contains(graph))
 			{
-				remove.add(graph);
-				//datasets.removeGraph(NodeFactory.createURI(graph));
+				System.out.println("Found illegal graph "+graph);
+				return false;
 			}
 		}
-		for (String rg:remove)
-		{
-			graphs.remove(rg);
-		}
-		if (remove.size()>0) return true;
 		
-		return false;
+		return true;
 			
 	}
 	

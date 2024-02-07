@@ -55,7 +55,6 @@ public class LockedServletFilter extends FusekiFilter {
 				if (query!=null)
 				{
 					
-					   		
 					    System.out.println("user call so applying filters "+query);
 						SecuredServletRequest ssr=new SecuredServletRequest(r2,query);
 						chain.doFilter(ssr, response);		

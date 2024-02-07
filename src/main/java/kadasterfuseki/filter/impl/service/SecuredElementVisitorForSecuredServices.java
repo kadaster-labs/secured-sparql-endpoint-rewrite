@@ -74,7 +74,7 @@ ServiceFilter serviceFilter=null;
 			}
 			if (this.serviceFilter.notAllowedStartingWith!=null)
 			{
-			    service = service.toLowerCase();
+			 //  String serviceLC = service.toLowerCase();
 				for (String filterS:this.serviceFilter.notAllowedStartingWith)
 				{
 					if (service.toLowerCase().startsWith(filterS))

@@ -31,13 +31,15 @@ public class SecureGraphsVisitor  implements ElementVisitor  {
 @Override
 public void visit(ElementTriplesBlock el) {
 	// TODO Auto-generated method stub
+	el=el;
 	el.visit(this);
 }
 
+public boolean foundBSPOutsideNamedGraph=false;
 @Override
 public void visit(ElementPathBlock el) {
 	// TODO Auto-generated method stub
-	
+	if (currentlyInNamedGraph==false) foundBSPOutsideNamedGraph =true;
 	
 	
 }
@@ -108,11 +110,15 @@ public void visit(ElementDataset el) {
 }
 public Vector<String> namedGraphs = new Vector<String>();
 
+boolean currentlyInNamedGraph=false;
 @Override
 public void visit(ElementNamedGraph el) {
 	// TODO Auto-generated method stub
+	boolean oldValue=currentlyInNamedGraph;
+	currentlyInNamedGraph=true;
 	el.getElement().visit(this);
 	namedGraphs.add(el.getGraphNameNode().toString());
+	currentlyInNamedGraph=oldValue;
 }
 
 @Override

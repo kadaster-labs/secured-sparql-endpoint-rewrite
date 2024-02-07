@@ -3,6 +3,7 @@ package kadasterfuseki.filter.impl.horizontal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
@@ -23,7 +24,9 @@ public class AddendumHorizontal {
 		this.hfilter=hf.objectValue;
 		this.hCls=hf.ofClass;
 		this.hpred=hf.hpred;
+		this.inGraph=hf.inGraph;
 	}
+	
 	public List<Var> projectVars = null;
 	public ParameterExtractieVisitor pev = null;
 	
@@ -73,27 +76,43 @@ public class AddendumHorizontal {
 	public String  hfilter=null; //<https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/25>
 	public String hCls=null;
 	public String hpred=null;
+	public String inGraph=null;
+	
 	
 	public boolean addHorizontalRestrictions(Query query, Var v)
 	{
 		return addHorizontalRestrictions(query,v.toString());
 	}
+	static int g=0;
 	public boolean addHorizontalRestrictions(Query query, String v)
 	{
 		
-	
+	  
 		Element e=query.getQueryPattern();
 		//ElementGroup eg  = new ElementGroup();
 	//	eg.addElement(query.getQueryPattern());
 	
 		if (e instanceof ElementGroup)
 		{
+			g++;
 			ElementGroup eg = (ElementGroup) e;
 			
 			String s="select * where {"
 					+ " optional "
-					+ "    {"
-					+ "       "+v.toString()+" a  <"+hCls+">"
+					+ "    {";
+				
+			   if (false)
+			   {
+					if (inGraph!=null)
+					{
+						s+=" graph <"+this.inGraph+"> {";
+					}
+					else
+					{
+						s+=" graph ?g"+g+" {";			
+					}
+			   }
+					s+= "       "+v.toString()+" a  <"+hCls+">"
 					+ "      bind (false as "+v.toString()+"HFRT) \n"
 			
 					+ "optional{\n"
@@ -102,7 +121,7 @@ public class AddendumHorizontal {
 				
 					+ "bind (true as "+v.toString()+"HFRValidT)\n}}"
 				
-					 +"filter coalesce("+v.toString()+"HFRValidT,"+v.toString()+"HFRT,true)";
+					 +"filter (coalesce("+v.toString()+"HFRValidT,"+v.toString()+"HFRT,true) )";
 
 					//+ "filter(if(BOUND("+v.toString()+"HFRT),if(BOUND("+v.toString()+"HFRValidT),true,false),false) )";
 				
@@ -110,6 +129,7 @@ public class AddendumHorizontal {
 				
 				
 			s+="\n\n}";
+		//	s+="\n\n}";  when using graph
 			
 		s=s.replace("\u200B", " ");
 			
@@ -128,30 +148,6 @@ public class AddendumHorizontal {
 	}
 	
 	
-	public static void main(String[] arg)
-	{
-		String query="prefix brp:<https://data.federatief.datastelsel.nl/lock-unlock/brp/def/>\r\n"
-				+ "#Persona_Zeewolde\r\n"
-				+ "select distinct * \r\n"
-				+ "\r\n"
-				+ "where\r\n"
-				+ "{\r\n"
-				+ "  graph <https://data.federatief.datastelsel.nl/lock-unlock/brp>\r\n"
-				+ "\r\n"
-				+ "  {\r\n"
-				+ "        ?persoon brp:bsn ?bsn\r\n"
-				+ "  \r\n"
-				+ "  }\r\n"
-				+ "}limit 100";
-	//	System.out.println(query);
-		
-		Query q  = QueryFactory.create(query);
-		
-		HorizontalFilter hf = new HorizontalFilter("https://data.federatief.datastelsel.nl/lock-unlock/brp/def/NatuurlijkPersoon","https://data.federatief.datastelsel.nl/lock-unlock/brp/def/heeftVerblijfsplaats","https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/1156");  //<https://brk.basisregistraties.overheid.nl/brk2/id/kadastraleGemeente/25>
-		new AddendumHorizontal(hf).processQuery(q);
-		
-		
-		
-	}
+	
 
 }

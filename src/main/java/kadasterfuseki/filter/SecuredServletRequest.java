@@ -34,20 +34,22 @@ public class SecuredServletRequest extends HttpServletRequestWrapper {
 			String endpoint =request.getRequestURL().toString();
 				Query q  = QueryFactory.create(query);
 				User user =UserFactory.getUser(request);
+				
 				if (user!=null)
 				{
-				
+				   if (user.isLogUser()) {this.squery=query; return;}
 					RewriteSparqlEngine esq = new RewriteSparqlEngine(request,q, user,endpoint);
 					this.squery=esq.query.toString();
 					try
 					{
 						endpoint=endpoint.split("\\?")[0];
 						
-						TAccess ta =new TAccess(endpoint+"?persona="+UserDB.SystemPersona);
+						
 					
 							if (!user.isSystem())
 							{
-								if (SparqlLogging.shouldLog(ta))
+								TAccess ta =new TAccess(endpoint+"?persona="+SparqlLogging.logPersona);
+								if (SparqlLogging.shouldLog(ta,true))
 								{
 								 SparqlLogging log=new SparqlLogging(request.getRequestURL().toString());
 								 log.addQueries(query, esq.query.toString(), user);

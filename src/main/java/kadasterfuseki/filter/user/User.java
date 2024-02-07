@@ -37,6 +37,11 @@ public class User {
 		if (this.label==SparqlLogging.logPersona) return true;
 		return false;
 	}
+	public boolean isLogUser()
+	{
+		if (this.label==SparqlLogging.logPersona) return true;
+		return false;
+	}
 	private void addTestServiceFilters()
 	{
 	  Vector<String> sfilter=new Vector<String>();

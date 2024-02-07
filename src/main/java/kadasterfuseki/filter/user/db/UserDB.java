@@ -26,7 +26,7 @@ public class UserDB {
 	{
 		try
 		{
-			System.out.println("setting up userdb");
+		
 			String localHost = request.getLocalAddr();
 	        int localPort = request.getLocalPort();
 	        String path = request.getRequestURI();
@@ -34,9 +34,10 @@ public class UserDB {
 	        String endpoint =met+ localHost+":"+localPort+"/"+path;
 	        String repo = path.toLowerCase().replace("/sparql", "").replace("/query", "").replace("/","");
 	        endpoint=request.getRequestURL().toString()+"?persona="+UserDB.SystemPersona;
+	    	System.out.println("setting up userdb using "+endpoint);
 	        create(endpoint);
 	        System.out.println("user db ready");
-	        SparqlLogging.addLog(request, "loading users (v0.5)");
+	        SparqlLogging.addLog(request, "loading users (v0.7)");
 	        
 	        
 		}
@@ -130,8 +131,15 @@ public class UserDB {
 		String ofClass=rule.getFirstAsString(LDResource.baseAuth+"ofClass");
 		String hpred =rule.getFirstAsString(LDResource.baseAuth+"predicate");
 		String objectValue=rule.getFirstAsString(LDResource.baseAuth+"objectValueShouldBe");
+		String inGraph=null;
+		try
+		{
+			 Object o=rule.getRelations(LDResource.baseAuth+"inGraph");
+			 inGraph=rule.getRelations(LDResource.baseAuth+"inGraph").firstElement().getFirstAsString(LDResource.baseAuth+"graph");
+		}
+		catch(Exception e) {}
 		
-		HorizontalFilter hf = new HorizontalFilter(ofClass, hpred, objectValue);
+		HorizontalFilter hf = new HorizontalFilter(ofClass, hpred, objectValue,inGraph);
 		user.horizontalFilters.add(hf);
 	}
 	public void createInAccessiblePredicateValue(User user, LDResource rule)

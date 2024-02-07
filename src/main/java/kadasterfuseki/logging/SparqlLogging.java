@@ -40,7 +40,7 @@ public class SparqlLogging {
 		return logPersona;
 	}
 	
-	public static boolean shouldLog(TAccess ta)
+	public static boolean shouldLog(TAccess ta,boolean b)
 	{
 		try
 		{
