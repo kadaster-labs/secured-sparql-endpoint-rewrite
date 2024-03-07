@@ -83,19 +83,19 @@ WORKDIR $FUSEKI_DIR
 
 ## -- Make reduced Java JDK
 
-ARG JDEPS_EXTRA="jdk.crypto.cryptoki,jdk.crypto.ec"
-RUN \
-  JDEPS="$(jdeps --multi-release base --print-module-deps --ignore-missing-deps ${FUSEKI_JAR})"  && \
-  jlink \
-        --compress 2 --strip-debug --no-header-files --no-man-pages \
-        --output "${JAVA_MINIMAL}" \
-        --add-modules "${JDEPS},${JDEPS_EXTRA}"
+# ARG JDEPS_EXTRA="jdk.crypto.cryptoki,jdk.crypto.ec"
+# RUN \
+#   JDEPS="$(jdeps --multi-release base --print-module-deps --suggest-providers java.nio.charset.spi.CharsetProvider --ignore-missing-deps ${FUSEKI_JAR})"  && \
+#   jlink \
+#         --compress 2 --strip-debug --no-header-files --no-man-pages \
+#         --output "${JAVA_MINIMAL}" \
+#         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
 ADD ${LOCAL_DOCKER_DIR}/entrypoint.sh .
 ADD ${LOCAL_DOCKER_DIR}/log4j2.properties .
 
 ## ---- Stage: Build runtime
-FROM alpine:${ALPINE_VERSION}
+FROM amazoncorretto:17-alpine3.19
 
 ## Import ARGs
 ARG JENA_VERSION
@@ -103,7 +103,7 @@ ARG JAVA_MINIMAL
 ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 
-COPY --from=base /opt/java-minimal /opt/java-minimal
+# COPY --from=base /opt/java-minimal /opt/java-minimal
 COPY --from=base /fuseki /fuseki
 
 WORKDIR $FUSEKI_DIR
@@ -136,7 +136,7 @@ RUN \
 
 ## Default environment variables.
 ENV \
-    JAVA_HOME=${JAVA_MINIMAL}           \
+    # JAVA_HOME=${JAVA_MINIMAL}           \
     JAVA_OPTIONS="-Xmx2048m -Xms2048m"  \
     JENA_VERSION=${JENA_VERSION}        \
     FUSEKI_JAR="${FUSEKI_JAR}"          \
