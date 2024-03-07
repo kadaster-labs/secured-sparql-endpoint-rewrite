@@ -1,9 +1,10 @@
 package kadasterfuseki.filter.impl;
 
 import java.net.URL;
+
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;

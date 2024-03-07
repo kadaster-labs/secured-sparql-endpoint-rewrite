@@ -1,7 +1,8 @@
 package kadasterfuseki.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;

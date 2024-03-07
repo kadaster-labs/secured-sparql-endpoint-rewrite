@@ -1,11 +1,12 @@
 package kadasterfuseki.filter.user;
 
 import java.util.Hashtable;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.query.Query;
@@ -204,8 +205,8 @@ public class UserFactory {
 	private static User createAnonymous()
 	{
 		User u = new User("anon");
-		u.allowedGraphs.add("https://data.labs.kadaster.nl/Unlock/unlock/rkkgpercelen");
-		u.allowedGraphs.add("https://data.federatief.datastelsel.nl/lock-unlock/anbi");
+		u.addAllowedGraph("https://data.labs.kadaster.nl/Unlock/unlock/rkkgpercelen");
+		u.addAllowedGraph("https://data.federatief.datastelsel.nl/lock-unlock/anbi");
 		u.performGraphRestrictions=true;
 		u.performPredicateRestrictions=false;
 		return u;
@@ -242,8 +243,8 @@ public class UserFactory {
 	private static User createAdmin()
 	{
 		User u = new User("admin");
-		u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authentication-ontology/graphs/users");
-		u.allowedGraphs.add("https://data.labs.kadaster.nl/lock-unlock/authorisation-ontology/graphs/rules");
+		u.addAllowedGraph("https://data.labs.kadaster.nl/lock-unlock/authentication-ontology/graphs/users");
+		u.addAllowedGraph("https://data.labs.kadaster.nl/lock-unlock/authorisation-ontology/graphs/rules");
 		u.performPredicateRestrictions=false;
 		u.performGraphRestrictions=true;
 		return u;
@@ -255,7 +256,7 @@ public class UserFactory {
 		User u = new User("logUser");
 		u.performGraphRestrictions=true;
 		u.performPredicateRestrictions=false;
-		u.allowedGraphs.add("http://labs.kadaster.nl/logging");
+		u.addAllowedGraph("http://labs.kadaster.nl/logging");
 		return u;
 		
 	}

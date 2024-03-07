@@ -1,10 +1,11 @@
 package kadasterfuseki.logging;
 
 import java.util.Date;
+
 import java.util.UUID;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jena.graph.Graph;

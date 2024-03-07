@@ -1,10 +1,11 @@
 package kadasterfuseki.filter.user.db;
 
 import java.util.Hashtable;
+
 import java.util.UUID;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.fuseki.webapp.FusekiEnv;
@@ -116,7 +117,7 @@ public class UserDB {
 		            if (graph.contains(LDResource.baseAuth+"part_of_dataset",dataset.uri))
 		            		{
 		            				 
-		            	        user.allowedGraphs.add(graph.getFirstAsString(LDResource.baseAuth+"graph"));
+		            	        user.addAllowedGraph(graph.getFirstAsString(LDResource.baseAuth+"graph"));
 		            	        
 		            		}
 		    }

@@ -2,17 +2,19 @@ package kadasterfuseki.filter;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.FilterChain;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.fuseki.servlets.FusekiFilter;
 import org.apache.jena.sparql.util.Context;
 
+import jakarta.servlet.FilterConfig;
 import kadasterfuseki.filter.user.User;
 import kadasterfuseki.filter.user.UserFactory;
 import kadasterfuseki.filter.user.db.UserDB;
@@ -29,11 +31,7 @@ public class LockedServletFilter extends FusekiFilter {
 		// TODO Auto-generated method stub
 		super.init(filterConfig);
 		 Fuseki.serverLog.info("Add Kadaster Lock-Unlock Authorization filter version 0.6");
-		
-		
-		 
-		 
-		
+			
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class LockedServletFilter extends FusekiFilter {
 				if (query!=null)
 				{
 					
-					    System.out.println("user call so applying filters "+query);
+					 //   System.out.println("user call so applying filters "+query);
 						SecuredServletRequest ssr=new SecuredServletRequest(r2,query);
 						chain.doFilter(ssr, response);		
 						return;

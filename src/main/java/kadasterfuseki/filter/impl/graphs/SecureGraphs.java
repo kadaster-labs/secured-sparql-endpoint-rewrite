@@ -1,9 +1,10 @@
 package kadasterfuseki.filter.impl.graphs;
 
 import java.util.List;
+
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.jena.fuseki.Fuseki;
 import org.apache.jena.graph.NodeFactory;

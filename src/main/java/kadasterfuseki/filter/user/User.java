@@ -30,6 +30,14 @@ public class User {
 	 // addTestServiceFilters();
 	  
 	}
+	
+	public void addAllowedGraph(String graph)
+	{
+		graph=graph.replaceAll("\"", "");
+		allowedGraphs.add(graph);
+	}
+	
+	
 	public boolean needsLoging()
 	{
 		if (this.label==UserDB.SystemPersona) return false;
