@@ -28,6 +28,7 @@ public class RewriteSparqlEngine
  HttpServletRequest request=null;
 
  public boolean rewritten=false;
+ 
 	public RewriteSparqlEngine(HttpServletRequest request,Query query,User user, String endpoint) 
 	{
 	   this.query=query;
